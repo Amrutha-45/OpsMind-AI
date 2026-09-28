@@ -1,0 +1,48 @@
+services:
+  hindsight:
+    image: ghcr.io/vectorize-io/hindsight:latest
+    container_name: opsmind-hindsight
+    ports:
+      - "8888:8888"   # Hindsight API
+      - "9999:9999"   # Hindsight Memory Inspection UI
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+      - HINDSIGHT_LLM_PROVIDER=${HINDSIGHT_LLM_PROVIDER:-openai}
+    restart: unless-stopped
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: opsmind-backend
+    ports:
+      - "8000:8000"
+    environment:
+      - HINDSIGHT_API_URL=http://hindsight:8888
+      - HINDSIGHT_API_KEY=${HINDSIGHT_API_KEY:-}
+      - HINDSIGHT_TENANT=${HINDSIGHT_TENANT:-default}
+      - OPSMIND_BANK_PREFIX=${OPSMIND_BANK_PREFIX:-opsmind}
+      - OPSMIND_DB_PATH=/data/opsmind.db
+      - OPSMIND_HOST=0.0.0.0
+      - OPSMIND_PORT=8000
+    volumes:
+      - opsmind_data:/data
+    depends_on:
+      - hindsight
+    restart: unless-stopped
+
+  frontend:
+    image: python:3.12-alpine
+    container_name: opsmind-frontend
+    working_dir: /app
+    volumes:
+      - ./frontend:/app:ro
+    command: ["python", "-m", "http.server", "3000"]
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+volumes:
+  opsmind_data:

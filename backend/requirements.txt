@@ -1,0 +1,9 @@
+# Production entrypoint (opsmind/api.py) — needs these.
+# opsmind/server_stdlib.py needs NONE of these; it only uses the
+# Python standard library, for environments without pip access.
+fastapi>=0.115
+uvicorn[standard]>=0.30
+pydantic>=2.7
+
+# Optional: use the official SDK instead of opsmind/hindsight_client.py
+# hindsight-client>=0.1
