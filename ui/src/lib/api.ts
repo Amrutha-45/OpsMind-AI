@@ -14,9 +14,19 @@ import type {
   SeedResult,
 } from '@/types';
 
+// Production backend URL (Render deployment)
+const RENDER_URL = 'https://opsmind-ai-x96p.onrender.com';
+
+// Resolve the API base URL:
+//   1. Use VITE_API_URL if explicitly set at build time
+//   2. Fall back to RENDER_URL when not running on localhost (i.e., deployed to Vercel)
+//   3. Use empty string on localhost so Vite's dev proxy handles routing
 const BASE = import.meta.env.VITE_API_URL
   ? (import.meta.env.VITE_API_URL as string).replace(/\/$/, '')
-  : '';
+  : typeof window !== 'undefined' && !window.location.hostname.includes('localhost')
+    ? RENDER_URL
+    : '';
+
 
 async function request<T>(
   method: string,
