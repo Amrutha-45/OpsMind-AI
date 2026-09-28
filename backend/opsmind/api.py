@@ -143,12 +143,50 @@ def serve_ui():
 @app.post("/demo/seed")
 def seed_demo():
     repo_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
-    data_file = os.path.join(repo_root, "data", "sample_incidents.json")
-    if not os.path.isfile(data_file):
-        raise HTTPException(status_code=404, detail="sample_incidents.json not found")
+    DEFAULT_SAMPLE_INCIDENTS = [
+        {
+            "service": "payments",
+            "title": "Payments API returning 500s",
+            "description": "Payments API started returning 500 errors shortly after the 2pm deploy. Connection pool exhausted under normal traffic.",
+            "severity": "SEV2",
+            "tags": ["payments", "5xx", "deploy"],
+            "root_cause": "The DB connection pool size was left at its low default after a config refactor, so it saturated under normal peak traffic.",
+            "resolution": "Raised the connection pool size and added a pre-deploy check that fails the build if pool size drops below a safe threshold."
+        },
+        {
+            "service": "payments",
+            "title": "Payments API 500s again",
+            "description": "Payments API is throwing 500s again, right after this morning's deploy. Looks like connection pool exhaustion.",
+            "severity": "SEV2",
+            "tags": ["payments", "5xx", "deploy"],
+            "root_cause": "Same as before: pool size regressed after a redeploy of the base image.",
+            "resolution": "Applied the same pool-size fix from the prior incident. Filed a follow-up to bake the pool-size check into the base image itself."
+        },
+        {
+            "service": "notifications",
+            "title": "Emails delayed by up to 40 minutes",
+            "description": "Outbound email queue is backing up. SMTP provider dashboard shows elevated latency on their end.",
+            "severity": "SEV3",
+            "tags": ["notifications", "smtp", "latency"],
+            "root_cause": "Upstream SMTP provider had a regional outage; our retry backoff was too conservative to drain the backlog quickly once they recovered.",
+            "resolution": "Manually triggered a faster-retry drain job and lowered the base backoff for transient 4xx responses from the provider."
+        },
+        {
+            "service": "auth",
+            "title": "Login failures spiking for EU users",
+            "description": "EU users report intermittent login failures. Error rate correlates with a spike in rate-limiter rejections.",
+            "severity": "SEV2",
+            "tags": ["auth", "rate-limit", "eu"],
+            "root_cause": "A CDN cache-key change caused many distinct users to share one rate-limit bucket by IP instead of by session.",
+            "resolution": "Reverted the cache-key change and switched the rate limiter to key on session token instead of IP."
+        }
+    ]
 
-    with open(data_file, "r", encoding="utf-8") as f:
-        records = json.load(f)
+    if os.path.isfile(data_file):
+        with open(data_file, "r", encoding="utf-8") as f:
+            records = json.load(f)
+    else:
+        records = DEFAULT_SAMPLE_INCIDENTS
 
     loaded = []
     for rec in records:
