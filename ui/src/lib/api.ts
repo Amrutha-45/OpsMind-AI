@@ -14,32 +14,16 @@ import type {
   SeedResult,
 } from '@/types';
 
-// Backend target URLs
-const RENDER_URL = 'https://opsmind-ai-x96p.onrender.com';
+// Backend target URL
 const LOCALHOST_URL = 'http://localhost:8000';
 
-// Resolve the API base URL:
-//   1. Use VITE_API_URL if explicitly provided via env
-//   2. If in development mode (import.meta.env.DEV) or running on localhost / 127.0.0.1, use LOCALHOST_URL (http://localhost:8000)
-//   3. In production builds on non-localhost hosts (such as Vercel), use RENDER_URL
+// Resolve the API base URL - default strictly to local backend http://localhost:8000
 const getBaseUrl = (): string => {
   const envUrl = import.meta.env.VITE_API_URL;
   if (envUrl && typeof envUrl === 'string' && envUrl.trim() !== '') {
     return envUrl.trim().replace(/\/$/, '');
   }
-
-  if (import.meta.env.DEV) {
-    return LOCALHOST_URL;
-  }
-
-  if (typeof window !== 'undefined') {
-    const host = window.location.hostname;
-    if (host === 'localhost' || host === '127.0.0.1') {
-      return LOCALHOST_URL;
-    }
-  }
-
-  return RENDER_URL;
+  return LOCALHOST_URL;
 };
 
 const BASE = getBaseUrl();
