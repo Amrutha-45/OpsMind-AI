@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: opsmind-backend
+    env: python
+    region: oregon
+    plan: free
+    buildCommand: "pip install -r backend/requirements.txt"
+    startCommand: "uvicorn opsmind.api:app --app-dir backend --host 0.0.0.0 --port $PORT"
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.0
+      - key: OPSMIND_DB_PATH
+        value: /tmp/opsmind.db
+      - key: HINDSIGHT_API_URL
+        value: http://localhost:8888
+      - key: OPSMIND_SIMILARITY_THRESHOLD
+        value: "0.2"

@@ -42,10 +42,8 @@ class TestAgentLearningLoop(unittest.TestCase):
                 severity="SEV2",
             )
             self.assertEqual(inc1.status, "open")
-            # REMEMBER retains this incident before RECALL runs, so the only
-            # thing recall can possibly surface here is the incident's own
-            # just-retained memory -- there is no *prior* incident yet.
-            self.assertTrue(all(inc1.title in s.text for s in inc1.similar_past_incidents))
+            # Self-match prevention: current incident must NEVER match itself on a clean bank
+            self.assertEqual(len(inc1.similar_past_incidents), 0)
 
             # Resolve it -> REMEMBER the fix
             resolved1 = agent.on_incident_resolved(
@@ -63,6 +61,8 @@ class TestAgentLearningLoop(unittest.TestCase):
                 severity="SEV2",
             )
             self.assertGreaterEqual(len(inc2.similar_past_incidents), 1)
+            # Ensure inc2 does NOT match itself
+            self.assertFalse(any(inc2.title in s.text for s in inc2.similar_past_incidents))
             surfaced_text = " ".join(s.text for s in inc2.similar_past_incidents)
             self.assertIn("pool", surfaced_text.lower())
 
@@ -72,8 +72,8 @@ class TestAgentLearningLoop(unittest.TestCase):
                 title="Emails delayed",
                 description="SMTP queue backing up",
             )
-            self.assertTrue(all(inc_other.title in s.text for s in inc_other.similar_past_incidents))
-            self.assertFalse(any("pool" in s.text.lower() for s in inc_other.similar_past_incidents))
+            # Notifications bank has no prior memories, so 0 recalls (no self-match, no payments leak)
+            self.assertEqual(len(inc_other.similar_past_incidents), 0)
 
             # --- LEARN: reflect synthesizes an insight across both payments incidents ---
             insight = agent.reflect("payments", "Why do payments outages keep happening?")

@@ -23,11 +23,14 @@ class Settings:
     db_path: str = os.environ.get("OPSMIND_DB_PATH", "./opsmind.db")
 
     host: str = os.environ.get("OPSMIND_HOST", "0.0.0.0")
-    port: int = int(os.environ.get("OPSMIND_PORT", "8000"))
+    port: int = int(os.environ.get("PORT", os.environ.get("OPSMIND_PORT", "8000")))
 
     # Number of past incidents recall() should surface when a new
     # incident comes in ("apply" step).
     recall_limit: int = int(os.environ.get("OPSMIND_RECALL_LIMIT", "5"))
+
+    # Minimum similarity score (0.0 to 1.0) for a recalled memory to be considered relevant
+    similarity_threshold: float = float(os.environ.get("OPSMIND_SIMILARITY_THRESHOLD", "0.2"))
 
 
 settings = Settings()

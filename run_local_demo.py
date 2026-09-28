@@ -37,8 +37,8 @@ def main():
     with FakeHindsightServer(host="127.0.0.1", port=8888) as fake_hindsight:
         print(f"[OK] Fake Hindsight running at {fake_hindsight.url}")
 
-        server = ThreadingHTTPServer(("127.0.0.1", 8000), Handler)
-        dashboard_url = "http://127.0.0.1:8000"
+        server = ThreadingHTTPServer((settings.host, settings.port), Handler)
+        dashboard_url = f"http://{settings.host}:{settings.port}"
         print(f"[OK] OpsMind Server running at {dashboard_url}")
         print("-" * 72)
         print(f"Open {dashboard_url} in your browser to interact with the dashboard!")

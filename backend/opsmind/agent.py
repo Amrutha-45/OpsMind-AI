@@ -66,32 +66,32 @@ class OpsMindAgent:
         incident = Incident.create(service, title, description, severity, tags)
         bank = self.bank_id(service)
 
-        # REMEMBER: this incident becomes a new experience in the bank,
-        # regardless of whether recall below succeeds.
-        try:
-            self.hindsight.retain(
-                bank_id=bank,
-                content=f"Incident opened: {title}. {description}",
-                context=f"incident:{incident.id}",
-                metadata={"incident_id": incident.id, "severity": severity, "phase": "opened"},
-            )
-        except HindsightError:
-            # Memory is best-effort from the responder's point of view —
-            # an incident must never fail to open just because the memory
-            # backend is briefly unreachable.
-            pass
-
-        # RECALL + APPLY: has anything like this happened before?
+        # RECALL + APPLY: search ONLY PREVIOUSLY COMMITTED/RESOLVED memories in this bank.
+        # The current incident is NOT added to permanent memory until it is resolved by an operator.
         try:
             recalled = self.hindsight.recall(
                 bank_id=bank,
                 query=f"{title}. {description}",
                 max_results=settings.recall_limit,
             )
-            incident.similar_past_incidents = [
-                SimilarIncident(text=m.text, memory_type=m.type, score=m.score)
-                for m in recalled.results
-            ]
+            filtered_results = []
+            for m in recalled.results:
+                m_meta = m.metadata or {}
+                # Exclude self-matches: match by incident ID in metadata, context, or content
+                if m_meta.get("incident_id") == incident.id:
+                    continue
+                if f"incident:{incident.id}" in m.text or incident.id in str(m_meta):
+                    continue
+                if m.text.startswith(f"Incident opened: {title}"):
+                    continue
+                # Exclude memories below similarity threshold
+                if m.score < settings.similarity_threshold:
+                    continue
+                filtered_results.append(
+                    SimilarIncident(text=m.text, memory_type=m.type, score=m.score)
+                )
+
+            incident.similar_past_incidents = filtered_results
         except HindsightError:
             incident.similar_past_incidents = []
 

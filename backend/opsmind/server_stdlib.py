@@ -78,7 +78,7 @@ class Handler(BaseHTTPRequestHandler):
         query = {k: v[0] for k, v in parse_qs(parsed.query).items()}
 
         try:
-            if method == "GET" and (path in ("/", "/index.html", "/ui") or path.startswith("/static/")):
+            if method == "GET" and (path in ("/", "/index.html", "/ui") or path.startswith("/static/") or path.startswith("/assets/")):
                 return self._serve_frontend(path)
             if method == "GET" and path == "/health":
                 return self._health()
@@ -175,9 +175,22 @@ class Handler(BaseHTTPRequestHandler):
 
     def _serve_frontend(self, path: str):
         repo_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+        dist_index = os.path.join(repo_root, "frontend", "dist", "index.html")
+        legacy_index = os.path.join(repo_root, "frontend", "index.html")
+
         if path in ("/", "/index.html", "/ui"):
-            target_path = os.path.join(repo_root, "frontend", "index.html")
+            target_path = dist_index if os.path.isfile(dist_index) else legacy_index
             content_type = "text/html; charset=utf-8"
+        elif path.startswith("/assets/"):
+            target_path = os.path.join(repo_root, "frontend", "dist", path.lstrip("/"))
+            if target_path.endswith(".css"):
+                content_type = "text/css; charset=utf-8"
+            elif target_path.endswith(".js"):
+                content_type = "application/javascript; charset=utf-8"
+            elif target_path.endswith(".svg"):
+                content_type = "image/svg+xml"
+            else:
+                content_type = "application/octet-stream"
         else:
             rel = path.lstrip("/")
             if rel.startswith("static/"):

@@ -4,164 +4,198 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>OpsMind AI — Memory-Powered Incident Response</title>
-  <meta name="description" content="An autonomous incident response agent built on Hindsight memory: Remember, Recall, Apply, Learn, Improve." />
+  <meta name="description" content="An autonomous SRE copilot built on Hindsight memory: Remember, Recall, Apply, Learn, Improve." />
   
   <!-- Modern Typography -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <style>
     :root {
-      --bg-base: #090d13;
-      --bg-surface: #0e141f;
-      --bg-card: #141c2a;
-      --bg-card-hover: #192436;
-      --bg-glass: rgba(20, 28, 42, 0.75);
-      --border-subtle: #1e293b;
-      --border-light: #2b394f;
+      /* Dark Background System */
+      --bg-base: #07090e;
+      --bg-surface: #0c1017;
+      --bg-card: #121824;
+      --bg-card-hover: #172030;
+      --bg-elevated: #1a2334;
+
+      /* Subtle Borders */
+      --border-subtle: #1c2636;
+      --border-light: #28374d;
       --border-focus: #06b6d4;
-      
-      --text-main: #f1f5f9;
-      --text-muted: #94a3b8;
-      --text-faint: #475569;
-      
-      /* Distinct Theme Accents */
+
+      /* Text Colors */
+      --text-main: #f8fafc;
+      --text-body: #cbd5e1;
+      --text-muted: #8292a8;
+      --text-faint: #4b5a6f;
+
+      /* Distinct Brand & Cognitive Accents */
       --cyan-core: #06b6d4;
-      --cyan-glow: rgba(6, 182, 212, 0.25);
+      --cyan-dim: rgba(6, 182, 212, 0.12);
+      --cyan-border: rgba(6, 182, 212, 0.35);
+
       --teal-memory: #14b8a6;
-      --teal-dim: rgba(20, 184, 166, 0.15);
+      --teal-dim: rgba(20, 184, 166, 0.12);
+      --teal-border: rgba(20, 184, 166, 0.35);
+
       --purple-reflect: #a855f7;
-      --purple-dim: rgba(168, 85, 247, 0.15);
+      --purple-dim: rgba(168, 85, 247, 0.12);
+      --purple-border: rgba(168, 85, 247, 0.35);
+
       --emerald-resolve: #10b981;
-      --emerald-dim: rgba(16, 185, 129, 0.15);
-      
-      /* Severity Palette */
-      --sev1-bg: rgba(239, 68, 68, 0.15);
+      --emerald-dim: rgba(16, 185, 129, 0.12);
+      --emerald-border: rgba(16, 185, 129, 0.35);
+
+      /* Severity Colors */
+      --sev1-bg: rgba(239, 68, 68, 0.12);
       --sev1-border: rgba(239, 68, 68, 0.4);
       --sev1-text: #f87171;
-      --sev2-bg: rgba(249, 115, 22, 0.15);
+
+      --sev2-bg: rgba(249, 115, 22, 0.12);
       --sev2-border: rgba(249, 115, 22, 0.4);
       --sev2-text: #fb923c;
-      --sev3-bg: rgba(234, 179, 8, 0.15);
+
+      --sev3-bg: rgba(234, 179, 8, 0.12);
       --sev3-border: rgba(234, 179, 8, 0.4);
       --sev3-text: #facc15;
-      --sev4-bg: rgba(148, 163, 184, 0.15);
-      --sev4-border: rgba(148, 163, 184, 0.4);
-      --sev4-text: #cbd5e1;
 
-      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      --font-mono: 'JetBrains Mono', Consolas, monospace;
+      --sev4-bg: rgba(148, 163, 184, 0.12);
+      --sev4-border: rgba(148, 163, 184, 0.35);
+      --sev4-text: #94a3b8;
+
+      /* Typography & Metrics */
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --font-mono: 'JetBrains Mono', 'SFMono-Regular', Consolas, monospace;
       --radius-sm: 6px;
-      --radius-md: 10px;
-      --radius-lg: 14px;
-      --shadow-sm: 0 2px 4px rgba(0,0,0,0.3);
-      --shadow-md: 0 4px 12px rgba(0,0,0,0.4);
-      --shadow-glow: 0 0 20px rgba(6, 182, 212, 0.15);
+      --radius-md: 8px;
+      --radius-lg: 12px;
+      --shadow-card: 0 4px 16px rgba(0, 0, 0, 0.35);
+      --shadow-elevated: 0 10px 30px rgba(0, 0, 0, 0.5);
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    html, body { height: 100%; }
+    html, body { height: 100%; width: 100%; overflow: hidden; max-width: 100vw; }
     body {
       background-color: var(--bg-base);
       color: var(--text-main);
       font-family: var(--font-sans);
       font-size: 13.5px;
       line-height: 1.5;
-      overflow: hidden;
       display: flex;
       flex-direction: column;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
     }
 
-    /* ---- App Shell & Header ---- */
+    /* ---- App Header ---- */
     header {
       background: var(--bg-surface);
       border-bottom: 1px solid var(--border-subtle);
-      padding: 10px 20px;
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      flex-shrink: 0;
-      z-index: 20;
-    }
-    .brand-wrap {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      text-decoration: none;
-      color: inherit;
-    }
-    .brand-icon {
-      width: 32px;
-      height: 32px;
-      border-radius: var(--radius-sm);
-      background: linear-gradient(135deg, var(--cyan-core), var(--purple-reflect));
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 0 12px var(--cyan-glow);
-    }
-    .brand-icon svg { width: 18px; height: 18px; fill: white; }
-    .brand-title {
-      font-size: 16px;
-      font-weight: 700;
-      letter-spacing: -0.2px;
+      padding: 0 14px;
+      height: 50px;
       display: flex;
       align-items: center;
       gap: 8px;
+      flex-shrink: 0;
+      z-index: 30;
+      overflow: hidden;
     }
-    .brand-title .badge {
+
+    .brand-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      color: inherit;
+      flex-shrink: 0;
+    }
+    .brand-logo {
+      width: 28px;
+      height: 28px;
+      border-radius: var(--radius-md);
+      background: linear-gradient(135deg, #0891b2, #7c3aed);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 12px rgba(6, 182, 212, 0.3);
+      flex-shrink: 0;
+    }
+    .brand-logo svg { width: 16px; height: 16px; fill: white; }
+    .brand-title {
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+    }
+    .brand-badge {
       font-size: 10.5px;
       font-family: var(--font-mono);
       background: var(--teal-dim);
       color: var(--teal-memory);
-      border: 1px solid rgba(20, 184, 166, 0.3);
+      border: 1px solid var(--teal-border);
       padding: 1px 7px;
       border-radius: 999px;
-      font-weight: 500;
+      font-weight: 600;
     }
 
-    /* Loop Stage Badges in Header */
+    /* 5-Stage Indicator Ribbon */
     .loop-strip {
       display: flex;
       align-items: center;
-      gap: 4px;
-      background: rgba(14, 20, 31, 0.8);
+      gap: 3px;
+      background: var(--bg-card);
       border: 1px solid var(--border-subtle);
       border-radius: var(--radius-sm);
       padding: 3px 8px;
-      font-size: 11px;
+      font-size: 10px;
       font-family: var(--font-mono);
-      margin-left: 10px;
+      color: var(--text-muted);
+      flex-shrink: 1;
+      min-width: 0;
+      overflow: hidden;
     }
     .loop-step {
-      color: var(--text-muted);
-      display: flex;
+      transition: color 0.15s ease;
+      display: inline-flex;
       align-items: center;
-      gap: 4px;
+      gap: 3px;
+      white-space: nowrap;
     }
-    .loop-step.active { color: var(--cyan-core); font-weight: 600; }
+    .loop-step.active {
+      color: var(--cyan-core);
+      font-weight: 700;
+    }
     .loop-arrow { color: var(--text-faint); }
+    @media (max-width: 1400px) {
+      .loop-strip { display: none; }
+    }
 
-    /* Nav Tabs */
+    /* Navigation Tabs */
     .nav-tabs {
       display: flex;
-      gap: 6px;
+      gap: 2px;
       margin-left: auto;
+      flex-shrink: 0;
     }
     .nav-btn {
       background: transparent;
       border: 1px solid transparent;
       color: var(--text-muted);
-      padding: 6px 12px;
+      padding: 5px 9px;
       border-radius: var(--radius-sm);
-      font-size: 12.5px;
+      font-size: 11.5px;
       font-weight: 500;
       cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 4px;
       transition: all 0.15s ease;
+      white-space: nowrap;
     }
     .nav-btn:hover {
       color: var(--text-main);
@@ -171,19 +205,21 @@
       background: var(--bg-card);
       border-color: var(--border-light);
       color: var(--cyan-core);
+      font-weight: 600;
     }
 
-    /* Connectivity & Server Settings */
+    /* Server Status Input */
     .server-status {
       display: flex;
       align-items: center;
-      gap: 8px;
-      font-family: var(--font-mono);
-      font-size: 11.5px;
-      background: var(--bg-base);
+      gap: 6px;
+      background: var(--bg-card);
       border: 1px solid var(--border-subtle);
-      padding: 4px 10px;
+      padding: 3px 7px;
       border-radius: var(--radius-sm);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      flex-shrink: 0;
     }
     .status-dot {
       width: 7px;
@@ -191,37 +227,38 @@
       border-radius: 50%;
       background: #eab308;
       box-shadow: 0 0 6px currentColor;
+      flex-shrink: 0;
     }
     .status-dot.online { background: var(--emerald-resolve); }
     .status-dot.offline { background: #ef4444; }
-    
     .base-url-input {
       background: transparent;
       border: none;
       color: var(--text-muted);
       font-family: var(--font-mono);
-      font-size: 11.5px;
-      width: 155px;
+      font-size: 10px;
+      width: 115px;
       outline: none;
     }
     .base-url-input:focus { color: var(--text-main); }
 
+    /* Header Action Buttons */
     .header-actions {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 5px;
+      flex-shrink: 0;
     }
 
-    /* Buttons */
     .btn {
       appearance: none;
       border: 1px solid var(--border-light);
       background: var(--bg-card);
       color: var(--text-main);
       font-family: var(--font-sans);
-      font-size: 12.5px;
+      font-size: 12px;
       font-weight: 500;
-      padding: 6px 14px;
+      padding: 6px 12px;
       border-radius: var(--radius-sm);
       cursor: pointer;
       display: inline-flex;
@@ -240,22 +277,20 @@
       border-color: #06b6d4;
       color: white;
       font-weight: 600;
-      box-shadow: 0 2px 8px rgba(6, 182, 212, 0.3);
     }
     .btn-primary:hover {
       filter: brightness(1.1);
-      box-shadow: 0 2px 14px rgba(6, 182, 212, 0.5);
+      box-shadow: 0 2px 10px rgba(6, 182, 212, 0.4);
     }
     .btn-demo {
       background: linear-gradient(135deg, #7c3aed, #9333ea);
       border-color: #a855f7;
       color: white;
       font-weight: 600;
-      box-shadow: 0 2px 8px rgba(147, 51, 234, 0.3);
     }
     .btn-demo:hover {
       filter: brightness(1.1);
-      box-shadow: 0 2px 14px rgba(147, 51, 234, 0.5);
+      box-shadow: 0 2px 10px rgba(168, 85, 247, 0.4);
     }
     .btn-ghost {
       background: transparent;
@@ -267,64 +302,69 @@
       color: var(--text-main);
     }
     .btn-sm {
-      padding: 4px 9px;
+      padding: 4px 8px;
       font-size: 11.5px;
     }
 
-    /* ---- Scorecard Bar ---- */
-    .scorecard-bar {
+    /* ---- Compact KPI Ribbon Bar ---- */
+    .kpi-bar {
       background: var(--bg-surface);
       border-bottom: 1px solid var(--border-subtle);
-      padding: 8px 20px;
-      display: grid;
-      grid-template-columns: repeat(4, 1fr) auto;
-      gap: 16px;
+      padding: 6px 14px;
+      display: flex;
+      gap: 12px;
       align-items: center;
       flex-shrink: 0;
+      overflow: hidden;
     }
-    .metric-card {
+    .kpi-card {
       display: flex;
       flex-direction: column;
-      gap: 2px;
+      gap: 0;
+      min-width: 0;
+      flex: 1 1 0;
     }
-    .metric-top {
+    .kpi-top {
       display: flex;
       align-items: baseline;
-      gap: 8px;
+      gap: 6px;
     }
-    .metric-value {
+    .kpi-value {
       font-family: var(--font-mono);
-      font-size: 18px;
+      font-size: 16px;
       font-weight: 700;
       color: var(--text-main);
     }
-    .metric-label {
-      font-size: 11px;
+    .kpi-label {
+      font-size: 10px;
       text-transform: uppercase;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.06em;
       color: var(--text-muted);
       font-weight: 600;
+      white-space: nowrap;
     }
-    .metric-sub {
-      font-size: 11px;
+    .kpi-sub {
+      font-size: 10px;
       color: var(--text-faint);
       display: flex;
       align-items: center;
       gap: 4px;
+      white-space: nowrap;
     }
-    .metric-sub .pill {
+    .kpi-sub .pill {
       font-family: var(--font-mono);
-      font-size: 10px;
-      padding: 0 4px;
+      font-size: 9px;
+      padding: 1px 4px;
       border-radius: 3px;
     }
 
-    /* ---- Main Workspace Layout ---- */
+    /* ---- Main Workspace Container ---- */
     main {
       flex: 1;
       display: flex;
       min-height: 0;
       position: relative;
+      overflow: hidden;
     }
 
     .view-container {
@@ -336,44 +376,60 @@
       display: flex;
     }
 
-    /* VIEW 1: INCIDENTS CONSOLE (Split 3-col or 2-col) */
-    .incidents-view {
+    /* =========================================================================
+       VIEW 1: CLEAN 25% | 50% | 25% INCIDENTS WORKSPACE
+       Uses percentage-based columns to guarantee no clipping at 1366px.
+       ========================================================================= */
+    .incidents-workspace {
       display: grid;
-      grid-template-columns: 380px 1fr 380px;
+      grid-template-columns: minmax(240px, 25%) 1fr minmax(230px, 25%);
       width: 100%;
       height: 100%;
-    }
-    @media (max-width: 1300px) {
-      .incidents-view { grid-template-columns: 340px 1fr; }
-      .incidents-view .side-panel-col { display: none; }
-    }
-    @media (max-width: 850px) {
-      .incidents-view { grid-template-columns: 1fr; }
-      .incidents-view .detail-col { display: none; }
-      .incidents-view.show-mobile-detail .feed-col { display: none; }
-      .incidents-view.show-mobile-detail .detail-col { display: flex; }
+      overflow: hidden;
     }
 
+    @media (max-width: 1100px) {
+      .incidents-workspace {
+        grid-template-columns: minmax(220px, 24%) 1fr minmax(210px, 24%);
+      }
+    }
+    @media (max-width: 980px) {
+      .incidents-workspace {
+        grid-template-columns: 240px 1fr;
+      }
+      .agent-panel-col {
+        display: none;
+      }
+    }
+    @media (max-width: 680px) {
+      .incidents-workspace {
+        grid-template-columns: 1fr;
+      }
+      .feed-col { display: none; }
+    }
+
+    /* Column Shared Styles */
     .col {
       display: flex;
       flex-direction: column;
       border-right: 1px solid var(--border-subtle);
       background: var(--bg-surface);
       min-height: 0;
+      min-width: 0;
       overflow: hidden;
     }
     .col-header {
-      padding: 12px 16px;
+      padding: 8px 12px;
       border-bottom: 1px solid var(--border-subtle);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 10px;
+      gap: 6px;
       flex-shrink: 0;
       background: var(--bg-surface);
     }
     .col-title {
-      font-size: 12px;
+      font-size: 11.5px;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.08em;
@@ -385,20 +441,21 @@
     .col-count {
       font-family: var(--font-mono);
       font-size: 10.5px;
-      background: var(--border-subtle);
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
       padding: 1px 6px;
       border-radius: 999px;
       color: var(--text-muted);
     }
 
-    /* Filters Bar */
+    /* Left Column: Stream Filters & Cards */
     .filter-bar {
-      padding: 8px 12px;
+      padding: 6px 10px;
       border-bottom: 1px solid var(--border-subtle);
       background: var(--bg-base);
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 5px;
       flex-shrink: 0;
     }
     .search-input-wrap {
@@ -408,9 +465,9 @@
     }
     .search-input-wrap svg {
       position: absolute;
-      left: 10px;
-      width: 14px;
-      height: 14px;
+      left: 8px;
+      width: 12px;
+      height: 12px;
       fill: var(--text-faint);
     }
     .search-input {
@@ -419,19 +476,17 @@
       border: 1px solid var(--border-subtle);
       border-radius: var(--radius-sm);
       color: var(--text-main);
-      padding: 6px 10px 6px 30px;
+      padding: 5px 8px 5px 26px;
       font-family: var(--font-sans);
-      font-size: 12px;
+      font-size: 11px;
       outline: none;
     }
-    .search-input:focus {
-      border-color: var(--border-focus);
-    }
+    .search-input:focus { border-color: var(--border-focus); }
 
     .filter-selects {
       display: grid;
       grid-template-columns: 1fr 1fr 1fr;
-      gap: 6px;
+      gap: 3px;
     }
     select {
       background: var(--bg-card);
@@ -439,55 +494,57 @@
       border-radius: var(--radius-sm);
       color: var(--text-main);
       font-family: var(--font-sans);
-      font-size: 11.5px;
-      padding: 4px 6px;
+      font-size: 10.5px;
+      padding: 3px 4px;
       outline: none;
       cursor: pointer;
+      min-width: 0;
     }
     select:focus { border-color: var(--border-focus); }
 
-    /* Incident List Scroll */
     .col-scroll {
       flex: 1;
       overflow-y: auto;
-      padding: 10px;
+      overflow-x: hidden;
+      padding: 6px;
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 5px;
     }
 
-    /* Incident Card */
+    /* Incident Stream Cards */
     .incident-card {
       background: var(--bg-card);
       border: 1px solid var(--border-subtle);
       border-radius: var(--radius-md);
-      padding: 12px;
+      padding: 8px 10px;
       cursor: pointer;
       transition: all 0.15s ease;
       position: relative;
+      min-width: 0;
+      overflow: hidden;
     }
     .incident-card:hover {
       background: var(--bg-card-hover);
       border-color: var(--border-light);
-      transform: translateY(-1px);
     }
     .incident-card.active {
       border-color: var(--cyan-core);
-      box-shadow: 0 0 12px rgba(6, 182, 212, 0.2);
-      background: #162233;
+      background: #141c2c;
+      box-shadow: 0 0 10px rgba(6, 182, 212, 0.15);
     }
     .card-top {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 6px;
+      margin-bottom: 4px;
     }
     .sev-pill {
       font-family: var(--font-mono);
-      font-size: 10px;
+      font-size: 9.5px;
       font-weight: 700;
-      padding: 2px 6px;
-      border-radius: 4px;
+      padding: 2px 5px;
+      border-radius: 3px;
       letter-spacing: 0.04em;
     }
     .sev-pill.SEV1 { background: var(--sev1-bg); border: 1px solid var(--sev1-border); color: var(--sev1-text); }
@@ -496,237 +553,355 @@
     .sev-pill.SEV4 { background: var(--sev4-bg); border: 1px solid var(--sev4-border); color: var(--sev4-text); }
 
     .status-pill {
-      font-size: 11px;
+      font-size: 10.5px;
       font-family: var(--font-mono);
       display: flex;
       align-items: center;
       gap: 4px;
       color: var(--text-muted);
     }
-    .status-pill.resolved {
-      color: var(--emerald-resolve);
-    }
+    .status-pill.resolved { color: var(--emerald-resolve); font-weight: 600; }
+
     .card-title {
-      font-size: 13.5px;
+      font-size: 12px;
       font-weight: 600;
       color: var(--text-main);
-      margin-bottom: 4px;
+      margin-bottom: 3px;
       line-height: 1.35;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
     }
     .card-meta {
-      font-size: 11.5px;
+      font-size: 10px;
       color: var(--text-muted);
       font-family: var(--font-mono);
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 4px;
       flex-wrap: wrap;
+      overflow: hidden;
     }
     .recalled-chip {
-      margin-top: 8px;
+      margin-top: 5px;
       background: var(--teal-dim);
-      border: 1px solid rgba(20, 184, 166, 0.3);
+      border: 1px solid var(--teal-border);
       color: var(--teal-memory);
-      font-size: 11px;
+      font-size: 10px;
       font-family: var(--font-mono);
-      padding: 3px 8px;
-      border-radius: 4px;
+      padding: 1px 5px;
+      border-radius: 3px;
       display: inline-flex;
       align-items: center;
-      gap: 5px;
+      gap: 3px;
+      font-weight: 600;
     }
 
-    /* DETAIL VIEW */
+    /* CENTER COLUMN: Spacious Incident + Hindsight Workspace */
     .detail-col {
       background: var(--bg-base);
       flex: 1;
       overflow-y: auto;
-      padding: 24px 32px;
+      overflow-x: hidden;
+      padding: 16px 18px;
       display: flex;
       flex-direction: column;
-      gap: 20px;
+      gap: 14px;
+      min-width: 0;
     }
+
     .detail-hero {
-      background: var(--bg-card);
+      background: var(--bg-surface);
       border: 1px solid var(--border-subtle);
       border-radius: var(--radius-lg);
-      padding: 20px;
+      padding: 14px 16px;
     }
     .detail-top-row {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 12px;
-      margin-bottom: 10px;
+      gap: 10px;
+      margin-bottom: 6px;
     }
     .detail-title {
-      font-size: 20px;
+      font-size: 17px;
       font-weight: 700;
       color: var(--text-main);
       letter-spacing: -0.3px;
+      margin-bottom: 6px;
+      line-height: 1.3;
+      word-break: break-word;
     }
     .detail-meta-bar {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 8px;
       font-family: var(--font-mono);
-      font-size: 12px;
+      font-size: 11px;
       color: var(--text-muted);
       border-top: 1px solid var(--border-subtle);
-      padding-top: 12px;
-      margin-top: 12px;
+      padding-top: 8px;
       flex-wrap: wrap;
     }
     .tag-bubble {
-      background: var(--border-subtle);
-      color: var(--text-muted);
-      padding: 2px 7px;
-      border-radius: 4px;
-      font-size: 11px;
-    }
-
-    /* Section Boxes */
-    .section-box {
       background: var(--bg-card);
       border: 1px solid var(--border-subtle);
-      border-radius: var(--radius-md);
-      padding: 18px;
+      color: var(--text-muted);
+      padding: 1px 5px;
+      border-radius: 4px;
+      font-size: 10px;
     }
-    .section-box-header {
+
+    /* Section Boxes in Center */
+    .section-box {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 14px 16px;
+    }
+    .section-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 12px;
+      margin-bottom: 8px;
+      gap: 8px;
+      flex-wrap: wrap;
     }
     .section-title {
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.08em;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 5px;
+      color: var(--text-muted);
     }
-    .section-title.memory-title { color: var(--teal-memory); }
-    .section-title.reflect-title { color: var(--purple-reflect); }
-    .section-title.resolve-title { color: var(--emerald-resolve); }
+    .section-title.memory-accent { color: var(--teal-memory); }
+    .section-title.agent-accent { color: var(--cyan-core); }
+    .section-title.resolve-accent { color: var(--emerald-resolve); }
 
-    .memory-card {
-      background: rgba(20, 184, 166, 0.06);
-      border: 1px solid rgba(20, 184, 166, 0.25);
-      border-left: 4px solid var(--teal-memory);
+    .terminal-box {
+      background: #080c14;
+      border: 1px solid var(--border-subtle);
       border-radius: var(--radius-sm);
-      padding: 12px;
-      margin-bottom: 10px;
+      padding: 8px 12px;
+      font-family: var(--font-mono);
+      font-size: 11.5px;
+      color: var(--text-body);
+      line-height: 1.55;
+      white-space: pre-wrap;
+      word-break: break-word;
+      max-height: 150px;
+      overflow-y: auto;
+    }
+
+    /* Hindsight Memory Card inside Center Workspace */
+    .memory-card {
+      background: rgba(20, 184, 166, 0.05);
+      border: 1px solid var(--teal-border);
+      border-left: 4px solid var(--teal-memory);
+      border-radius: var(--radius-md);
+      padding: 10px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 8px;
     }
     .memory-card-top {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 6px;
       font-family: var(--font-mono);
-      font-size: 11px;
+      font-size: 10.5px;
+      gap: 8px;
+      flex-wrap: wrap;
     }
-    .memory-score {
+    .memory-badge {
       background: var(--teal-dim);
       color: var(--teal-memory);
-      padding: 1px 6px;
-      border-radius: 3px;
-      font-weight: 600;
+      border: 1px solid var(--teal-border);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: 700;
     }
-    .memory-text {
-      font-size: 13px;
-      color: #e2e8f0;
+    .memory-content {
+      font-size: 12px;
+      color: var(--text-main);
+      line-height: 1.5;
       white-space: pre-wrap;
-      line-height: 1.45;
+      word-break: break-word;
     }
 
-    /* Feedback Row */
+    /* Feedback Action Box */
     .feedback-box {
-      margin-top: 12px;
-      padding: 12px;
-      background: var(--bg-surface);
+      background: var(--bg-card);
       border: 1px dashed var(--border-light);
       border-radius: var(--radius-sm);
+      padding: 8px 12px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 12px;
+      gap: 10px;
+      margin-top: 8px;
+      flex-wrap: wrap;
     }
     .feedback-prompt {
-      font-size: 12.5px;
+      font-size: 11px;
       color: var(--text-muted);
+      min-width: 0;
     }
     .feedback-actions {
       display: flex;
-      gap: 8px;
+      gap: 5px;
+      flex-shrink: 0;
     }
 
-    /* Forms */
-    .form-group {
+    /* RIGHT COLUMN: AGENT COGNITIVE & ACTION PANEL */
+    .agent-panel-col {
+      background: var(--bg-surface);
+      border-left: 1px solid var(--border-subtle);
       display: flex;
       flex-direction: column;
-      gap: 6px;
-      margin-bottom: 12px;
+      min-height: 0;
+      min-width: 0;
+      overflow: hidden;
     }
-    .form-label {
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--text-muted);
+    .agent-panel-scroll {
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
     }
-    input[type=text], textarea {
-      background: var(--bg-surface);
-      border: 1px solid var(--border-light);
-      border-radius: var(--radius-sm);
-      color: var(--text-main);
-      padding: 8px 12px;
-      font-family: var(--font-sans);
-      font-size: 13px;
-      outline: none;
-      transition: border-color 0.15s;
-    }
-    input[type=text]:focus, textarea:focus {
-      border-color: var(--border-focus);
-    }
-    textarea { min-height: 80px; resize: vertical; }
 
-    /* VIEW 2: REFLECTION BANK (LEARN) */
+    /* Agent Visual Timeline */
+    .agent-timeline {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      position: relative;
+    }
+    .timeline-node {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      padding: 7px 9px;
+      transition: all 0.15s ease;
+    }
+    .timeline-node.active-step {
+      border-color: var(--cyan-core);
+      background: #141c2b;
+      box-shadow: 0 0 10px rgba(6, 182, 212, 0.15);
+    }
+    .timeline-node.completed-step {
+      border-color: rgba(16, 185, 129, 0.3);
+      background: rgba(16, 185, 129, 0.03);
+    }
+    .node-icon {
+      width: 22px;
+      height: 22px;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      flex-shrink: 0;
+      background: var(--border-subtle);
+    }
+    .timeline-node.active-step .node-icon {
+      background: var(--cyan-dim);
+      color: var(--cyan-core);
+    }
+    .timeline-node.completed-step .node-icon {
+      background: var(--emerald-dim);
+      color: var(--emerald-resolve);
+    }
+    .node-body {
+      flex: 1;
+      min-width: 0;
+    }
+    .node-title {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--text-main);
+      margin-bottom: 1px;
+    }
+    .node-desc {
+      font-size: 10.5px;
+      color: var(--text-muted);
+      line-height: 1.35;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+    }
+
+    /* Quick Action Card in Right Panel */
+    .bank-info-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      padding: 8px 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .bank-info-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 10px;
+      gap: 4px;
+      flex-wrap: wrap;
+    }
+
+    /* =========================================================================
+       VIEW 2: REFLECTION BANK (LEARN)
+       ========================================================================= */
     .reflect-view {
-      padding: 24px 32px;
+      padding: 24px 30px;
       display: grid;
-      grid-template-columns: 460px 1fr;
+      grid-template-columns: 420px 1fr;
       gap: 24px;
       width: 100%;
       height: 100%;
       overflow-y: auto;
     }
-    @media (max-width: 900px) {
+    @media (max-width: 960px) {
       .reflect-view { grid-template-columns: 1fr; }
     }
-    .reflect-panel {
+    .reflect-card {
       background: var(--bg-surface);
       border: 1px solid var(--border-subtle);
       border-radius: var(--radius-lg);
-      padding: 24px;
+      padding: 20px;
       display: flex;
       flex-direction: column;
-      gap: 16px;
-    }
-    .prompt-suggestions {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
+      gap: 14px;
+      height: fit-content;
     }
     .prompt-chip {
       background: var(--bg-card);
       border: 1px solid var(--border-subtle);
       color: var(--text-muted);
-      padding: 6px 10px;
+      padding: 7px 10px;
       border-radius: var(--radius-sm);
       font-size: 12px;
       text-align: left;
       cursor: pointer;
-      transition: all 0.15s;
+      transition: all 0.15s ease;
+      line-height: 1.4;
     }
     .prompt-chip:hover {
       border-color: var(--purple-reflect);
@@ -738,12 +913,12 @@
       background: var(--bg-surface);
       border: 1px solid var(--border-subtle);
       border-radius: var(--radius-md);
-      padding: 16px;
+      padding: 16px 18px;
       margin-bottom: 12px;
     }
     .insight-q {
       font-size: 13.5px;
-      font-weight: 600;
+      font-weight: 700;
       color: var(--purple-reflect);
       margin-bottom: 8px;
       display: flex;
@@ -751,67 +926,75 @@
       gap: 8px;
     }
     .insight-a {
-      font-size: 13.5px;
-      color: #e2e8f0;
+      font-size: 13px;
+      color: var(--text-body);
       line-height: 1.55;
       margin-bottom: 12px;
       background: var(--bg-card);
-      padding: 12px;
+      padding: 12px 14px;
       border-radius: var(--radius-sm);
       border-left: 3px solid var(--purple-reflect);
     }
     .citations-header {
-      font-size: 11px;
-      font-weight: 600;
+      font-size: 10.5px;
+      font-weight: 700;
       text-transform: uppercase;
       color: var(--text-muted);
       margin-bottom: 6px;
+      letter-spacing: 0.05em;
     }
     .citation-item {
-      font-size: 12px;
+      font-size: 11.5px;
       color: var(--text-muted);
       font-family: var(--font-mono);
       background: var(--bg-base);
       padding: 6px 10px;
       border-radius: 4px;
-      margin-bottom: 4px;
+      margin-bottom: 5px;
       border-left: 2px solid var(--border-light);
     }
 
-    /* VIEW 3: SCOREBOARD (IMPROVE) */
+    /* =========================================================================
+       VIEW 3: SCOREBOARD (IMPROVE)
+       ========================================================================= */
     .score-view {
-      padding: 32px;
+      padding: 28px 36px;
       width: 100%;
       height: 100%;
       overflow-y: auto;
-      max-width: 1200px;
+      max-width: 1150px;
       margin: 0 auto;
     }
     .scoreboard-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 20px;
-      margin-bottom: 24px;
+      gap: 18px;
+      margin: 20px 0;
+    }
+    @media (max-width: 768px) {
+      .scoreboard-grid { grid-template-columns: 1fr; }
     }
     .stat-hero {
       background: var(--bg-surface);
       border: 1px solid var(--border-subtle);
       border-radius: var(--radius-lg);
-      padding: 24px;
+      padding: 20px;
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 6px;
     }
     .stat-hero-num {
       font-family: var(--font-mono);
-      font-size: 36px;
-      font-weight: 700;
+      font-size: 34px;
+      font-weight: 800;
       color: var(--cyan-core);
     }
 
-    /* VIEW 4: ARCHITECTURE GUIDE */
+    /* =========================================================================
+       VIEW 4: ARCHITECTURE & GUIDE
+       ========================================================================= */
     .arch-view {
-      padding: 32px;
+      padding: 28px 36px;
       width: 100%;
       height: 100%;
       overflow-y: auto;
@@ -822,14 +1005,14 @@
       background: var(--bg-surface);
       border: 1px solid var(--border-subtle);
       border-radius: var(--radius-lg);
-      padding: 24px;
-      margin-bottom: 24px;
+      padding: 20px 24px;
+      margin-bottom: 20px;
     }
     .arch-table {
       width: 100%;
       border-collapse: collapse;
-      margin-top: 16px;
-      font-size: 13px;
+      margin-top: 14px;
+      font-size: 12.5px;
     }
     .arch-table th, .arch-table td {
       border: 1px solid var(--border-subtle);
@@ -839,17 +1022,43 @@
     .arch-table th {
       background: var(--bg-card);
       color: var(--text-muted);
-      font-weight: 600;
-      font-size: 11.5px;
+      font-weight: 700;
+      font-size: 11px;
       text-transform: uppercase;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.06em;
     }
+
+    /* ---- Forms & Inputs ---- */
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      margin-bottom: 12px;
+    }
+    .form-label {
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+    input[type=text], textarea {
+      background: var(--bg-card);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-sm);
+      color: var(--text-main);
+      padding: 7px 10px;
+      font-family: var(--font-sans);
+      font-size: 12.5px;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+    input[type=text]:focus, textarea:focus { border-color: var(--border-focus); }
+    textarea { min-height: 75px; resize: vertical; }
 
     /* ---- Modals ---- */
     .modal-backdrop {
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.75);
+      background: rgba(0, 0, 0, 0.75);
       backdrop-filter: blur(4px);
       z-index: 100;
       display: none;
@@ -863,11 +1072,11 @@
       border: 1px solid var(--border-light);
       border-radius: var(--radius-lg);
       width: 100%;
-      max-width: 580px;
+      max-width: 560px;
       max-height: 90vh;
       overflow-y: auto;
-      padding: 24px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+      padding: 22px 24px;
+      box-shadow: var(--shadow-elevated);
       animation: modalSlide 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     }
     @keyframes modalSlide {
@@ -878,12 +1087,12 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 16px;
-      padding-bottom: 12px;
+      margin-bottom: 14px;
+      padding-bottom: 10px;
       border-bottom: 1px solid var(--border-subtle);
     }
     .modal-title {
-      font-size: 17px;
+      font-size: 16px;
       font-weight: 700;
       color: var(--text-main);
     }
@@ -891,7 +1100,7 @@
       background: transparent;
       border: none;
       color: var(--text-muted);
-      font-size: 18px;
+      font-size: 19px;
       cursor: pointer;
     }
     .modal-close:hover { color: var(--text-main); }
@@ -900,41 +1109,41 @@
       align-items: center;
       justify-content: flex-end;
       gap: 10px;
-      margin-top: 20px;
-      padding-top: 14px;
+      margin-top: 16px;
+      padding-top: 12px;
       border-top: 1px solid var(--border-subtle);
     }
 
-    /* Demo Tour Step Cards */
+    /* Demo Tour Cards */
     .demo-step-card {
       border: 1px solid var(--border-subtle);
       border-radius: var(--radius-md);
-      padding: 14px;
-      margin-bottom: 12px;
+      padding: 12px 14px;
+      margin-bottom: 10px;
       background: var(--bg-card);
       display: flex;
-      gap: 12px;
+      gap: 10px;
       align-items: flex-start;
       transition: all 0.2s;
     }
     .demo-step-card.running {
       border-color: var(--cyan-core);
-      box-shadow: 0 0 14px var(--cyan-glow);
+      box-shadow: 0 0 12px var(--cyan-dim);
     }
     .demo-step-card.done {
       border-color: var(--emerald-resolve);
       background: rgba(16, 185, 129, 0.05);
     }
     .step-num {
-      width: 26px;
-      height: 26px;
+      width: 24px;
+      height: 24px;
       border-radius: 50%;
       background: var(--border-subtle);
       display: flex;
       align-items: center;
       justify-content: center;
       font-family: var(--font-mono);
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 700;
       flex-shrink: 0;
     }
@@ -946,17 +1155,17 @@
       background: #05070a;
       border: 1px solid #1a2230;
       border-radius: var(--radius-sm);
-      padding: 10px;
+      padding: 10px 12px;
       font-family: var(--font-mono);
-      font-size: 11.5px;
-      color: #94a3b8;
-      max-height: 140px;
+      font-size: 11px;
+      color: var(--text-muted);
+      max-height: 130px;
       overflow-y: auto;
-      margin-top: 12px;
+      margin-top: 10px;
       white-space: pre-wrap;
     }
 
-    /* Toast Container */
+    /* Toasts */
     #toastContainer {
       position: fixed;
       bottom: 20px;
@@ -975,11 +1184,11 @@
       color: var(--text-main);
       padding: 10px 14px;
       border-radius: var(--radius-sm);
-      font-size: 12.5px;
-      box-shadow: var(--shadow-md);
+      font-size: 12px;
+      box-shadow: var(--shadow-card);
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
       animation: toastIn 0.2s ease;
       min-width: 260px;
       max-width: 380px;
@@ -991,7 +1200,6 @@
       to { transform: translateX(0); opacity: 1; }
     }
 
-    /* Empty states */
     .empty-placeholder {
       display: flex;
       flex-direction: column;
@@ -1000,39 +1208,38 @@
       padding: 40px 20px;
       color: var(--text-muted);
       text-align: center;
-      gap: 12px;
-      font-size: 13px;
+      gap: 10px;
+      font-size: 12.5px;
     }
     .empty-placeholder svg {
-      width: 44px;
-      height: 44px;
+      width: 40px;
+      height: 40px;
       fill: var(--text-faint);
     }
 
-    /* Custom Scrollbars */
-    ::-webkit-scrollbar { width: 7px; height: 7px; }
-    ::-webkit-scrollbar-thumb { background: #222d3d; border-radius: 4px; }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
     ::-webkit-scrollbar-track { background: transparent; }
   </style>
 </head>
 <body>
 
-  <!-- Top App Shell Header -->
+  <!-- Top Navigation Header -->
   <header>
     <a href="#" class="brand-wrap" id="logoReload">
-      <div class="brand-icon">
+      <div class="brand-logo">
         <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
       </div>
       <div>
         <div class="brand-title">
           OpsMind AI
-          <span class="badge">Hindsight Memory</span>
+          <span class="brand-badge">Hindsight Memory</span>
         </div>
       </div>
     </a>
 
-    <!-- Visual 5-Stage Loop Indicator -->
-    <div class="loop-strip" title="Hindsight Autonomous Agent Loop">
+    <!-- 5-Stage Agent Loop Badges -->
+    <div class="loop-strip" title="Hindsight Autonomous Cognitive Loop">
       <span class="loop-step" id="stepRemember">REMEMBER</span>
       <span class="loop-arrow">→</span>
       <span class="loop-step" id="stepRecall">RECALL</span>
@@ -1044,7 +1251,7 @@
       <span class="loop-step" id="stepImprove">IMPROVE</span>
     </div>
 
-    <!-- Navigation Tabs -->
+    <!-- Navigation Views -->
     <nav class="nav-tabs" role="tablist">
       <button class="nav-btn active" data-view="incidents" id="tabIncidents">
         ⚡ Incidents
@@ -1060,7 +1267,7 @@
       </button>
     </nav>
 
-    <!-- Backend & Hindsight Status -->
+    <!-- Server Connectivity Status -->
     <div class="server-status" title="API Status & Hindsight Connection">
       <span class="status-dot" id="headerStatusDot"></span>
       <input class="base-url-input" id="baseUrlInput" value="http://localhost:8000" title="Backend Server URL" />
@@ -1077,72 +1284,73 @@
     </div>
   </header>
 
-  <!-- Live Metrics Scorecard Ribbon -->
-  <section class="scorecard-bar" id="scorecardBar">
-    <div class="metric-card">
-      <div class="metric-top">
-        <span class="metric-value" id="mTotalIncidents">0</span>
-        <span class="metric-label">Incidents</span>
+  <!-- Live KPI Metrics Ribbon -->
+  <section class="kpi-bar" id="scorecardBar">
+    <div class="kpi-card">
+      <div class="kpi-top">
+        <span class="kpi-value" id="mTotalIncidents">0</span>
+        <span class="kpi-label">Incidents</span>
       </div>
-      <div class="metric-sub">
+      <div class="kpi-sub">
         <span class="pill" style="background:var(--sev1-bg);color:var(--sev1-text);" id="mOpenCount">0 open</span>
         <span class="pill" style="background:var(--emerald-dim);color:var(--emerald-resolve);" id="mResolvedCount">0 resolved</span>
       </div>
     </div>
 
-    <div class="metric-card">
-      <div class="metric-top">
-        <span class="metric-value" id="mRecalledCount" style="color:var(--teal-memory);">0</span>
-        <span class="metric-label">Fixes Recalled</span>
+    <div class="kpi-card">
+      <div class="kpi-top">
+        <span class="kpi-value" id="mRecalledCount" style="color:var(--teal-memory);">0</span>
+        <span class="kpi-label">Fixes Recalled</span>
       </div>
-      <div class="metric-sub">Autonomous RECALL applied</div>
+      <div class="kpi-sub">Autonomous RECALL surfaced</div>
     </div>
 
-    <div class="metric-card">
-      <div class="metric-top">
-        <span class="metric-value" id="mAcceptanceRate" style="color:var(--cyan-core);">–</span>
-        <span class="metric-label">Acceptance Rate</span>
+    <div class="kpi-card">
+      <div class="kpi-top">
+        <span class="kpi-value" id="mAcceptanceRate" style="color:var(--cyan-core);">–</span>
+        <span class="kpi-label">Acceptance Rate</span>
       </div>
-      <div class="metric-sub" id="mFeedbackRatio">0 helpful / 0 rated</div>
+      <div class="kpi-sub" id="mFeedbackRatio">0 helpful / 0 rated</div>
     </div>
 
-    <div class="metric-card">
-      <div class="metric-top">
-        <span class="metric-value" id="mBankCount">0</span>
-        <span class="metric-label">Memory Banks</span>
+    <div class="kpi-card">
+      <div class="kpi-top">
+        <span class="kpi-value" id="mBankCount">0</span>
+        <span class="kpi-label">Memory Banks</span>
       </div>
-      <div class="metric-sub" id="mActiveServices">Isolated per service</div>
+      <div class="kpi-sub" id="mActiveServices">Isolated per service</div>
     </div>
 
-    <div style="display:flex;gap:8px;">
+    <div style="display:flex;gap:6px;">
       <button class="btn btn-sm btn-ghost" id="btnSeedSample" title="Load sample dataset into memory">
         📥 Load Sample Data
       </button>
-      <button class="btn btn-sm btn-ghost" id="btnRefreshAll" title="Refresh data">
+      <button class="btn btn-sm btn-ghost" id="btnRefreshAll" title="Refresh all data">
         🔄 Refresh
       </button>
     </div>
   </section>
 
-  <!-- Main View Area -->
+  <!-- Main View Container -->
   <main>
 
-    <!-- VIEW 1: INCIDENTS CONSOLE -->
-    <div class="view-container incidents-view active" id="viewIncidents">
-      <!-- Left Column: Incidents Feed & Search/Filters -->
+    <!-- VIEW 1: CLEAN 25% | 50% | 25% INCIDENTS WORKSPACE -->
+    <div class="view-container incidents-workspace active" id="viewIncidents">
+      
+      <!-- LEFT COLUMN (~25%): Incident Stream & Filters -->
       <section class="col feed-col">
         <div class="col-header">
           <div class="col-title">
             <span>Incident Stream</span>
             <span class="col-count" id="incidentListCount">0</span>
           </div>
-          <button class="btn btn-sm btn-ghost" id="btnClearFilters" style="padding:2px 6px;">Reset</button>
+          <button class="btn btn-sm btn-ghost" id="btnClearFilters" style="padding:1px 5px;">Reset</button>
         </div>
 
         <div class="filter-bar">
           <div class="search-input-wrap">
             <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
-            <input class="search-input" id="filterSearch" placeholder="Search incidents, symptoms, tags..." />
+            <input class="search-input" id="filterSearch" placeholder="Search title, logs, tags..." />
           </div>
 
           <div class="filter-selects">
@@ -1151,13 +1359,13 @@
             </select>
             <select id="filterSeverity">
               <option value="">All SEV</option>
-              <option value="SEV1">SEV1 - Crit</option>
-              <option value="SEV2">SEV2 - High</option>
-              <option value="SEV3">SEV3 - Med</option>
-              <option value="SEV4">SEV4 - Low</option>
+              <option value="SEV1">SEV1</option>
+              <option value="SEV2">SEV2</option>
+              <option value="SEV3">SEV3</option>
+              <option value="SEV4">SEV4</option>
             </select>
             <select id="filterStatus">
-              <option value="">All Status</option>
+              <option value="">Status</option>
               <option value="open">Open</option>
               <option value="resolved">Resolved</option>
             </select>
@@ -1173,73 +1381,138 @@
         </div>
       </section>
 
-      <!-- Center Column: Incident Detail View -->
+      <!-- CENTER COLUMN (~50%): Incident Detail + Hindsight Memory (PRIMARY FOCUS) -->
       <section class="detail-col" id="incidentDetailCol">
         <div class="empty-placeholder" style="margin-top:100px;">
           <svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
-          <p style="font-weight:600;font-size:15px;color:var(--text-main);">No Incident Selected</p>
-          <p>Choose an incident from the stream to inspect symptoms, recalled memories, and resolutions.</p>
+          <p style="font-weight:700;font-size:15px;color:var(--text-main);">No Incident Selected</p>
+          <p>Choose an incident from the stream to inspect symptoms, recalled memories, and agent recommendations.</p>
         </div>
       </section>
 
-      <!-- Right Column: Live Reflection Sidebar -->
-      <section class="col side-panel-col">
+      <!-- RIGHT COLUMN (~25%): Agent Cognitive & Action Flow -->
+      <aside class="agent-panel-col" id="agentPanelCol">
         <div class="col-header">
-          <div class="col-title">
-            <span>Service Memory</span>
+          <div class="col-title" style="color:var(--cyan-core);">
+            <span>🤖 Agent State &amp; Flow</span>
           </div>
-          <span class="badge" style="font-family:var(--font-mono);font-size:10px;color:var(--purple-reflect);" id="activeServiceBadge">payments</span>
+          <span class="badge" style="background:var(--cyan-dim);color:var(--cyan-core);border:1px solid var(--cyan-border);font-family:var(--font-mono);font-size:10.5px;padding:2px 6px;border-radius:4px;" id="agentActiveBankBadge">
+            opsmind
+          </span>
         </div>
 
-        <div style="padding:12px 14px;border-bottom:1px solid var(--border-subtle);background:var(--bg-base);">
-          <div style="font-size:11px;color:var(--text-muted);margin-bottom:6px;font-weight:600;">QUICK REFLECT (LEARN)</div>
-          <textarea id="quickReflectInput" placeholder="Ask memory: Why do these failures recur?" style="width:100%;height:60px;font-size:12px;"></textarea>
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;">
-            <span style="font-size:10.5px;color:var(--text-faint);">Bank: <code id="quickBankName">opsmind-payments</code></span>
-            <button class="btn btn-sm btn-primary" id="btnQuickReflect">Reflect</button>
+        <div class="agent-panel-scroll" id="agentPanelBody">
+          <div class="bank-info-card">
+            <div class="bank-info-row">
+              <span style="color:var(--text-muted);font-weight:600;">Active Service Bank:</span>
+              <code style="color:var(--teal-memory);" id="sideBankName">opsmind-payments</code>
+            </div>
+            <div class="bank-info-row">
+              <span style="color:var(--text-muted);">Hindsight Status:</span>
+              <span style="color:var(--emerald-resolve);font-weight:600;">● Connected</span>
+            </div>
           </div>
-        </div>
 
-        <div class="col-header" style="border-top:1px solid var(--border-subtle);">
-          <div class="col-title">Recent Insights</div>
-        </div>
-        <div class="col-scroll" id="sidebarInsightList">
-          <div class="empty-placeholder" style="padding:20px;">
-            <span>No reflection insights yet. Ask a question above.</span>
+          <!-- 6-Step Visual Progression -->
+          <div style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--text-muted);letter-spacing:0.06em;margin-top:4px;">
+            Cognitive Action Path
+          </div>
+
+          <div class="agent-timeline">
+            <div class="timeline-node completed-step" id="tlStep1">
+              <div class="node-icon">⚡</div>
+              <div class="node-body">
+                <div class="node-title">1. Incident Detected</div>
+                <div class="node-desc">Symptom ingested &amp; retained.</div>
+              </div>
+            </div>
+
+            <div class="timeline-node completed-step" id="tlStep2">
+              <div class="node-icon">🧠</div>
+              <div class="node-body">
+                <div class="node-title">2. Hindsight Recall</div>
+                <div class="node-desc" id="tlRecallDesc">Searching memory bank...</div>
+              </div>
+            </div>
+
+            <div class="timeline-node active-step" id="tlStep3">
+              <div class="node-icon">🤖</div>
+              <div class="node-body">
+                <div class="node-title">3. Agent Analysis</div>
+                <div class="node-desc" id="tlAnalysisDesc">Correlating symptom patterns.</div>
+              </div>
+            </div>
+
+            <div class="timeline-node" id="tlStep4">
+              <div class="node-icon">🔧</div>
+              <div class="node-body">
+                <div class="node-title">4. Recommended Action</div>
+                <div class="node-desc" id="tlActionDesc">Surfacing candidate fix.</div>
+              </div>
+            </div>
+
+            <div class="timeline-node" id="tlStep5">
+              <div class="node-icon">✅</div>
+              <div class="node-body">
+                <div class="node-title">5. Verified Resolution</div>
+                <div class="node-desc" id="tlResolveDesc">Root cause diagnosis.</div>
+              </div>
+            </div>
+
+            <div class="timeline-node" id="tlStep6">
+              <div class="node-icon">🧠</div>
+              <div class="node-body">
+                <div class="node-title">6. Memory Updated</div>
+                <div class="node-desc">Retained for future incidents.</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Deep Reflection Shortcut -->
+          <div style="background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:var(--radius-sm);padding:12px;margin-top:auto;">
+            <div style="font-size:11.5px;font-weight:700;color:var(--purple-reflect);margin-bottom:4px;">
+              🧠 Want to reason across all incidents?
+            </div>
+            <p style="font-size:11px;color:var(--text-muted);line-height:1.4;margin-bottom:8px;">
+              Open the dedicated Memory Reflection tab to ask standing SRE post-mortem inquiries.
+            </p>
+            <button class="btn btn-sm" onclick="document.getElementById('tabReflect').click()" style="width:100%;border-color:var(--purple-border);color:var(--purple-reflect);background:var(--purple-dim);">
+              Go to Memory Reflection →
+            </button>
           </div>
         </div>
-      </section>
+      </aside>
     </div>
 
-    <!-- VIEW 2: KNOWLEDGE REFLECTION BANK (LEARN) -->
+    <!-- VIEW 2: DEDICATED KNOWLEDGE REFLECTION BANK (LEARN) -->
     <div class="view-container reflect-view" id="viewReflect">
-      <div class="reflect-panel">
+      <div class="reflect-card">
         <div>
-          <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
-            <h2 style="font-size:18px;font-weight:700;">Hindsight Reflection</h2>
-            <span class="badge" style="background:var(--purple-dim);color:var(--purple-reflect);border:1px solid rgba(168,85,247,0.3);font-family:var(--font-mono);font-size:11px;padding:2px 8px;border-radius:999px;">STAGE 4: LEARN</span>
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+            <h2 style="font-size:17px;font-weight:700;">Hindsight Reflection</h2>
+            <span class="badge" style="background:var(--purple-dim);color:var(--purple-reflect);border:1px solid var(--purple-border);font-family:var(--font-mono);font-size:11px;padding:2px 8px;border-radius:999px;">STAGE 4: LEARN</span>
           </div>
-          <p style="color:var(--text-muted);font-size:12.5px;">
-            Ask standing questions across a service's entire retained history. Hindsight reasons across all past incidents and resolutions to synthesize cited institutional knowledge.
+          <p style="color:var(--text-muted);font-size:12.5px;line-height:1.5;">
+            Ask standing questions across a service's entire retained history. Hindsight reasons across all past incidents and resolutions to synthesize cited institutional insights.
           </p>
         </div>
 
         <div class="form-group">
-          <label class="form-label" for="reflectServiceSelect">Target Service Bank</label>
-          <select id="reflectServiceSelect" style="padding:8px 10px;font-size:13px;"></select>
+          <label class="form-label" for="reflectServiceSelect">Target Service Memory Bank</label>
+          <select id="reflectServiceSelect" style="padding:7px 10px;font-size:12.5px;"></select>
         </div>
 
         <div class="form-group">
           <label class="form-label" for="reflectQueryText">Reflection Question</label>
-          <textarea id="reflectQueryText" placeholder="e.g. What is the root cause pattern behind recent outages? What checklist should on-call engineers execute first?" style="height:90px;"></textarea>
+          <textarea id="reflectQueryText" placeholder="e.g. What is the root cause pattern behind recent outages? What checklist should on-call engineers execute first?" style="height:85px;"></textarea>
         </div>
 
         <button class="btn btn-primary" id="btnRunReflect" style="background:linear-gradient(135deg, #7c3aed, #9333ea);border-color:#a855f7;">
           🧠 Reason &amp; Synthesize Insight
         </button>
 
-        <div class="prompt-suggestions">
-          <div style="font-size:11px;font-weight:600;text-transform:uppercase;color:var(--text-muted);margin-top:6px;">Sample SRE Inquiries:</div>
+        <div style="display:flex;flex-direction:column;gap:5px;margin-top:6px;">
+          <div style="font-size:10.5px;font-weight:700;text-transform:uppercase;color:var(--text-muted);letter-spacing:0.05em;">Sample SRE Inquiries:</div>
           <button class="prompt-chip" data-q="Why do payments outages keep happening, and what should responders check first?">
             "Why do payments outages keep happening, and what should responders check first?"
           </button>
@@ -1254,11 +1527,11 @@
 
       <div style="display:flex;flex-direction:column;min-height:0;overflow:hidden;">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
-          <h2 style="font-size:15px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-muted);">
+          <h2 style="font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-muted);">
             Synthesized Memory Archive (<span id="insightsCount">0</span>)
           </h2>
         </div>
-        <div style="flex:1;overflow-y:auto;padding-right:8px;" id="fullInsightsContainer">
+        <div style="flex:1;overflow-y:auto;padding-right:6px;" id="fullInsightsContainer">
           <div class="empty-placeholder">
             <svg viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 4.03-9 9 0 2.12.74 4.07 1.97 5.61L4.35 19.4c-.39.39-.39 1.02 0 1.41.39.39 1.02.39 1.41 0l1.9-1.9C9.22 19.64 10.56 20 12 20c4.97 0 9-4.03 9-9s-4.03-9-9-9zm0 15c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6z"/></svg>
             <p style="font-weight:600;">No Synthesized Insights Yet</p>
@@ -1268,44 +1541,44 @@
       </div>
     </div>
 
-    <!-- VIEW 3: LEARNING SCOREBOARD (IMPROVE) -->
+    <!-- VIEW 3: DEDICATED LEARNING SCOREBOARD (IMPROVE) -->
     <div class="view-container score-view" id="viewScoreboard">
-      <div style="margin-bottom:24px;">
+      <div style="margin-bottom:20px;">
         <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
-          <h1 style="font-size:24px;font-weight:700;">Learning Loop Scoreboard</h1>
-          <span class="badge" style="background:var(--teal-dim);color:var(--teal-memory);border:1px solid rgba(20,184,166,0.3);font-family:var(--font-mono);font-size:11px;padding:2px 8px;border-radius:999px;">STAGE 5: IMPROVE</span>
+          <h1 style="font-size:22px;font-weight:700;">Learning Loop Scoreboard</h1>
+          <span class="badge" style="background:var(--teal-dim);color:var(--teal-memory);border:1px solid var(--teal-border);font-family:var(--font-mono);font-size:11px;padding:2px 8px;border-radius:999px;">STAGE 5: IMPROVE</span>
         </div>
-        <p style="color:var(--text-muted);font-size:14px;">
-          The system improves with every incident. Responder feedback on recalled suggestions is retained back into Hindsight as experiential memory, continuously refining future recall precision and reflection weight.
+        <p style="color:var(--text-muted);font-size:13.5px;">
+          OpsMind improves with every incident. Responder feedback on recalled suggestions is retained back into Hindsight as experiential memory, continuously refining future recall precision and reflection weight.
         </p>
       </div>
 
       <div class="scoreboard-grid">
         <div class="stat-hero">
-          <div class="metric-label">Acceptance Rate</div>
+          <div class="kpi-label">Acceptance Rate</div>
           <div class="stat-hero-num" id="scoreRateBig">–</div>
-          <div style="font-size:12px;color:var(--text-muted);">Percentage of recalled suggestions rated helpful by responders</div>
+          <div style="font-size:11.5px;color:var(--text-muted);">Percentage of recalled suggestions rated helpful by responders</div>
         </div>
 
         <div class="stat-hero">
-          <div class="metric-label">Helpful Solutions Confirmed</div>
+          <div class="kpi-label">Helpful Solutions Confirmed</div>
           <div class="stat-hero-num" id="scoreHelpfulBig" style="color:var(--emerald-resolve);">0</div>
-          <div style="font-size:12px;color:var(--text-muted);">Past fixes successfully applied to solve new incidents</div>
+          <div style="font-size:11.5px;color:var(--text-muted);">Past fixes successfully applied to solve new incidents</div>
         </div>
 
         <div class="stat-hero">
-          <div class="metric-label">Total Feedback Events</div>
+          <div class="kpi-label">Total Feedback Events</div>
           <div class="stat-hero-num" id="scoreTotalBig" style="color:var(--purple-reflect);">0</div>
-          <div style="font-size:12px;color:var(--text-muted);">Signals retained back into Hindsight memory banks</div>
+          <div style="font-size:11.5px;color:var(--text-muted);">Signals retained back into Hindsight memory banks</div>
         </div>
       </div>
 
       <div class="arch-card">
-        <h3 style="font-size:16px;font-weight:700;margin-bottom:12px;">How the Improvement Loop Works in Hindsight</h3>
-        <p style="color:var(--text-muted);margin-bottom:12px;line-height:1.6;">
+        <h3 style="font-size:15px;font-weight:700;margin-bottom:10px;">How the Improvement Loop Works in Hindsight</h3>
+        <p style="color:var(--text-body);margin-bottom:10px;line-height:1.6;font-size:13px;">
           When an engineer clicks <strong style="color:var(--emerald-resolve);">👍 Helpful</strong> or <strong style="color:#ef4444;">👎 Not Helpful</strong> on an incident:
         </p>
-        <ol style="margin-left:20px;color:var(--text-muted);line-height:1.8;font-size:13.5px;">
+        <ol style="margin-left:20px;color:var(--text-body);line-height:1.7;font-size:13px;">
           <li>A durable feedback record is stored in SQLite (<code style="font-family:var(--font-mono);color:var(--cyan-core);">POST /incidents/{id}/feedback</code>).</li>
           <li><strong>Hindsight Memory Update</strong>: OpsMind calls <code style="font-family:var(--font-mono);color:var(--teal-memory);">hindsight.retain()</code> storing: <em>"Responder feedback on incident {id}: the suggestion '{text}' was helpful."</em></li>
           <li><strong>Future Recall &amp; Reflect Shaping</strong>: Next time a similar outage occurs, Hindsight prioritizes memories associated with confirmed positive resolutions, avoiding previously rejected suggestions.</li>
@@ -1313,17 +1586,17 @@
       </div>
     </div>
 
-    <!-- VIEW 4: ARCHITECTURE & GUIDE -->
+    <!-- VIEW 4: DEDICATED ARCHITECTURE & GUIDE -->
     <div class="view-container arch-view" id="viewArch">
-      <div style="margin-bottom:24px;">
-        <h1 style="font-size:24px;font-weight:700;margin-bottom:6px;">System Architecture &amp; Hindsight Primitives</h1>
-        <p style="color:var(--text-muted);font-size:14px;">
+      <div style="margin-bottom:20px;">
+        <h1 style="font-size:22px;font-weight:700;margin-bottom:6px;">System Architecture &amp; Hindsight Primitives</h1>
+        <p style="color:var(--text-muted);font-size:13.5px;">
           OpsMind AI connects real-time incident lifecycle management with Hindsight's vector/graph memory primitives.
         </p>
       </div>
 
       <div class="arch-card">
-        <h3 style="font-size:15px;font-weight:700;margin-bottom:10px;color:var(--cyan-core);">5-Stage Memory Loop Mapping</h3>
+        <h3 style="font-size:14.5px;font-weight:700;margin-bottom:8px;color:var(--cyan-core);">5-Stage Memory Loop Mapping</h3>
         <table class="arch-table">
           <thead>
             <tr>
@@ -1369,16 +1642,16 @@
       </div>
 
       <div class="arch-card">
-        <h3 style="font-size:15px;font-weight:700;margin-bottom:10px;color:var(--cyan-core);">Per-Service Bank Isolation</h3>
-        <p style="color:var(--text-muted);line-height:1.6;font-size:13.5px;">
+        <h3 style="font-size:14.5px;font-weight:700;margin-bottom:8px;color:var(--cyan-core);">Per-Service Bank Isolation</h3>
+        <p style="color:var(--text-body);line-height:1.6;font-size:13px;">
           OpsMind isolates memory into banks per service (<code style="color:var(--teal-memory);">opsmind-payments</code>, <code style="color:var(--teal-memory);">opsmind-auth</code>, <code style="color:var(--teal-memory);">opsmind-notifications</code>).
           This guarantees that incident vocabulary from one domain (e.g., SMTP latency) never pollutes recall results for an unrelated service (e.g., Database connection pools).
         </p>
       </div>
 
       <div class="arch-card">
-        <h3 style="font-size:15px;font-weight:700;margin-bottom:10px;color:var(--cyan-core);">Zero-Dependency Deployment Dual-Mode</h3>
-        <p style="color:var(--text-muted);line-height:1.6;font-size:13.5px;">
+        <h3 style="font-size:14.5px;font-weight:700;margin-bottom:8px;color:var(--cyan-core);">Zero-Dependency Deployment Dual-Mode</h3>
+        <p style="color:var(--text-body);line-height:1.6;font-size:13px;">
           OpsMind can be evaluated anywhere:
           <br>• <strong>Production</strong>: FastAPI + Uvicorn + Docker + official Hindsight server with 25+ LLM providers.
           <br>• <strong>Zero-Dependency Review</strong>: Built-in stdlib server (<code style="color:var(--cyan-core);">server_stdlib.py</code>) + protocol-accurate fake Hindsight server running purely on Python's standard library with no external dependencies required.
@@ -1396,9 +1669,9 @@
         <button class="modal-close" onclick="closeModal('modalNewIncident')">&times;</button>
       </div>
       <form id="formNewIncident">
-        <div style="background:var(--bg-base);padding:10px;border-radius:6px;margin-bottom:14px;border:1px dashed var(--border-light);">
-          <div style="font-size:11px;font-weight:600;color:var(--text-muted);margin-bottom:6px;">QUICK DEMO TEMPLATES:</div>
-          <div style="display:flex;gap:6px;flex-wrap:wrap;">
+        <div style="background:var(--bg-base);padding:8px 10px;border-radius:6px;margin-bottom:12px;border:1px dashed var(--border-light);">
+          <div style="font-size:10.5px;font-weight:700;color:var(--text-muted);margin-bottom:5px;">QUICK DEMO TEMPLATES:</div>
+          <div style="display:flex;gap:5px;flex-wrap:wrap;">
             <button type="button" class="btn btn-sm btn-ghost" onclick="fillTemplate('payments')">⚡ Payments 500 Outage</button>
             <button type="button" class="btn btn-sm btn-ghost" onclick="fillTemplate('auth')">🔒 Auth Rate-Limit Spike</button>
             <button type="button" class="btn btn-sm btn-ghost" onclick="fillTemplate('smtp')">📧 SMTP Queue Backlog</button>
@@ -1417,7 +1690,7 @@
 
         <div class="form-group">
           <label class="form-label" for="newIncSeverity">Severity Level</label>
-          <select id="newIncSeverity" style="padding:8px 10px;">
+          <select id="newIncSeverity" style="padding:7px 9px;">
             <option value="SEV1">SEV1 — Critical (Customer Facing Outage)</option>
             <option value="SEV2">SEV2 — High (Major Degraded Performance)</option>
             <option value="SEV3" selected>SEV3 — Medium (Moderate Anomaly)</option>
@@ -1454,10 +1727,10 @@
       </div>
       <form id="formResolveIncident">
         <input type="hidden" id="resolveIncId" />
-        <p style="color:var(--text-muted);font-size:13px;margin-bottom:14px;" id="resolveIncSummary"></p>
+        <p style="color:var(--text-muted);font-size:12.5px;margin-bottom:12px;" id="resolveIncSummary"></p>
 
         <div class="form-group">
-          <label class="form-label" for="resolveRootCause">Root Cause *</label>
+          <label class="form-label" for="resolveRootCause">Verified Root Cause *</label>
           <textarea id="resolveRootCause" placeholder="What actually failed? (e.g. DB connection pool saturated due to missing config)" required></textarea>
         </div>
 
@@ -1478,24 +1751,24 @@
 
   <!-- MODAL: INTERACTIVE 5-STAGE DEMO TOUR -->
   <div class="modal-backdrop" id="modalDemoTour">
-    <div class="modal-dialog" style="max-width:640px;">
+    <div class="modal-dialog" style="max-width:600px;">
       <div class="modal-header">
         <div class="modal-title" style="display:flex;align-items:center;gap:8px;">
           <span>Interactive 5-Stage Agent Demo Tour</span>
-          <span class="badge" style="background:var(--purple-dim);color:var(--purple-reflect);font-size:11px;">Automated Narrative</span>
+          <span class="badge" style="background:var(--purple-dim);color:var(--purple-reflect);border:1px solid var(--purple-border);font-size:10.5px;">Automated Narrative</span>
         </div>
         <button class="modal-close" onclick="closeModal('modalDemoTour')">&times;</button>
       </div>
       <div>
-        <p style="color:var(--text-muted);font-size:13px;margin-bottom:16px;">
+        <p style="color:var(--text-muted);font-size:12.5px;margin-bottom:14px;">
           Watch the full <strong>REMEMBER → RECALL → APPLY → LEARN → IMPROVE</strong> cycle execute live against the backend and Hindsight memory bank:
         </p>
 
         <div class="demo-step-card" id="demoStep1">
           <div class="step-num">1</div>
           <div>
-            <div style="font-weight:600;font-size:13.5px;color:var(--text-main);">1. REMEMBER: Open &amp; Resolve First Payments Outage</div>
-            <div style="font-size:12px;color:var(--text-muted);">
+            <div style="font-weight:600;font-size:13px;color:var(--text-main);">1. REMEMBER: Open &amp; Resolve First Payments Outage</div>
+            <div style="font-size:11.5px;color:var(--text-muted);">
               Opens Incident #1 (connection pool exhausted). Retains symptom and resolution to <code style="color:var(--teal-memory);">opsmind-payments</code>.
             </div>
           </div>
@@ -1504,8 +1777,8 @@
         <div class="demo-step-card" id="demoStep2">
           <div class="step-num">2</div>
           <div>
-            <div style="font-weight:600;font-size:13.5px;color:var(--text-main);">2. RECALL &amp; APPLY: Second Incident with Same Symptom</div>
-            <div style="font-size:12px;color:var(--text-muted);">
+            <div style="font-weight:600;font-size:13px;color:var(--text-main);">2. RECALL &amp; APPLY: Second Incident with Same Symptom</div>
+            <div style="font-size:11.5px;color:var(--text-muted);">
               Opens Incident #2. Hindsight recall immediately surfaces Incident #1's verified pool-size fix to the responder.
             </div>
           </div>
@@ -1514,8 +1787,8 @@
         <div class="demo-step-card" id="demoStep3">
           <div class="step-num">3</div>
           <div>
-            <div style="font-weight:600;font-size:13.5px;color:var(--text-main);">3. LEARN: Reflect Across All Payments Memories</div>
-            <div style="font-size:12px;color:var(--text-muted);">
+            <div style="font-weight:600;font-size:13px;color:var(--text-main);">3. LEARN: Reflect Across All Payments Memories</div>
+            <div style="font-size:11.5px;color:var(--text-muted);">
               Calls Hindsight reflect to synthesize a cited post-mortem pattern explaining why payments deploys fail.
             </div>
           </div>
@@ -1524,8 +1797,8 @@
         <div class="demo-step-card" id="demoStep4">
           <div class="step-num">4</div>
           <div>
-            <div style="font-weight:600;font-size:13.5px;color:var(--text-main);">4. IMPROVE: Record Feedback into Learning Scorecard</div>
-            <div style="font-size:12px;color:var(--text-muted);">
+            <div style="font-weight:600;font-size:13px;color:var(--text-main);">4. IMPROVE: Record Feedback into Learning Scorecard</div>
+            <div style="font-size:11.5px;color:var(--text-muted);">
               Responder marks recalled suggestion as helpful. Feedback is retained into Hindsight to steer future recall accuracy.
             </div>
           </div>
@@ -1543,7 +1816,7 @@
     </div>
   </div>
 
-  <!-- Toast Container -->
+  <!-- Toast Notification Container -->
   <div id="toastContainer"></div>
 
   <script>
@@ -1558,7 +1831,7 @@
       activeView: 'incidents',
     };
 
-    // DOM Helpers
+    // DOM Selectors
     const $ = (s) => document.querySelector(s);
     const $$ = (s) => document.querySelectorAll(s);
 
@@ -1589,7 +1862,7 @@
       }, 4000);
     }
 
-    // API Client with resilient error handling
+    // Resilient API Client
     async function apiRequest(method, path, body = null) {
       const url = getBaseUrl() + path;
       try {
@@ -1747,8 +2020,8 @@
       const incident = state.incidents.find(i => i.id === id);
       if (incident) {
         state.activeService = incident.service;
-        $('#activeServiceBadge').textContent = incident.service;
-        $('#quickBankName').textContent = `opsmind-${incident.service}`;
+        $('#sideBankName').textContent = `opsmind-${incident.service}`;
+        $('#agentActiveBankBadge').textContent = incident.service;
         renderIncidentDetail(incident);
       }
     }
@@ -1756,93 +2029,123 @@
     function renderIncidentDetail(i) {
       const col = $('#incidentDetailCol');
       const isResolved = i.status === 'resolved';
+      const hasRecalls = i.similar_past_incidents && i.similar_past_incidents.length > 0;
 
-      // Highlight loop steps
+      // Update Top Loop Stage Indicators
       $('#stepRemember').classList.add('active');
-      $('#stepRecall').classList.toggle('active', i.similar_past_incidents && i.similar_past_incidents.length > 0);
-      $('#stepApply').classList.toggle('active', i.similar_past_incidents && i.similar_past_incidents.length > 0);
+      $('#stepRecall').classList.toggle('active', hasRecalls);
+      $('#stepApply').classList.toggle('active', hasRecalls);
       $('#stepImprove').classList.toggle('active', isResolved);
 
-      // Recalled memories section
-      let recallHtml = '';
-      if (i.similar_past_incidents && i.similar_past_incidents.length > 0) {
-        const items = i.similar_past_incidents.map((s, idx) => `
+      // Update Right Agent Timeline Nodes
+      $('#tlRecallDesc').textContent = hasRecalls ? `Surfaced ${i.similar_past_incidents.length} matching candidate fix(es).` : 'No prior match in bank.';
+      $('#tlAnalysisDesc').textContent = hasRecalls ? `Pattern correlates with known issue in ${i.service}.` : `Novel vulnerability in ${i.service}.`;
+      $('#tlActionDesc').textContent = hasRecalls ? 'Suggested verified historical resolution.' : 'Follow service triage checklist.';
+      $('#tlResolveDesc').textContent = isResolved ? 'Root cause & hotfix verified.' : 'Awaiting responder hotfix commit.';
+      
+      $('#tlStep4').className = hasRecalls ? 'timeline-node completed-step' : 'timeline-node active-step';
+      $('#tlStep5').className = isResolved ? 'timeline-node completed-step' : (hasRecalls ? 'timeline-node active-step' : 'timeline-node');
+      $('#tlStep6').className = isResolved ? 'timeline-node completed-step' : 'timeline-node';
+
+      // 1. Recalled Hindsight Memories Block (Inside Center Workspace)
+      let recallSectionHtml = '';
+      if (hasRecalls) {
+        const memoryCards = i.similar_past_incidents.map((s, idx) => `
           <div class="memory-card">
             <div class="memory-card-top">
-              <span class="memory-score">${(s.score * 100).toFixed(0)}% Relevance Match</span>
-              <span style="color:var(--teal-memory);">${esc(s.memory_type)} memory</span>
+              <span class="memory-badge">${(s.score * 100).toFixed(0)}% Relevance Match</span>
+              <span style="color:var(--teal-memory);font-weight:600;font-size:11px;">${esc(s.memory_type)} memory</span>
             </div>
-            <div class="memory-text">${esc(s.text)}</div>
+            <div class="memory-content">${esc(s.text)}</div>
+            <div style="font-size:11px;color:var(--text-faint);border-top:1px solid rgba(20,184,166,0.2);padding-top:5px;">
+              Retained experience from prior resolution in <code>opsmind-${esc(i.service)}</code>
+            </div>
           </div>
         `).join('');
 
-        recallHtml = `
-          <div class="section-box">
-            <div class="section-box-header">
-              <div class="section-title memory-title">
-                ↺ Recalled From Hindsight Memory (RECALL → APPLY)
+        recallSectionHtml = `
+          <div class="section-box" style="border-color:var(--teal-border);background:rgba(20,184,166,0.03);">
+            <div class="section-header">
+              <div class="section-title memory-accent">
+                🧠 Recalled From Hindsight Memory (RECALL → APPLY)
               </div>
-              <span class="badge" style="background:var(--teal-dim);color:var(--teal-memory);font-family:var(--font-mono);font-size:11px;padding:2px 8px;border-radius:4px;">
-                ${i.similar_past_incidents.length} Candidate Solutions
+              <span class="badge" style="background:var(--teal-dim);color:var(--teal-memory);border:1px solid var(--teal-border);font-family:var(--font-mono);font-size:10.5px;padding:2px 7px;border-radius:4px;">
+                ${i.similar_past_incidents.length} Candidate Fix${i.similar_past_incidents.length > 1 ? 'es' : ''} Found
               </span>
             </div>
-            <p style="color:var(--text-muted);font-size:12.5px;margin-bottom:10px;">
-              The agent checked its memory bank for <code>${esc(i.service)}</code> and surfaced fixes that resolved similar incidents in the past:
+            <p style="color:var(--text-muted);font-size:12px;margin-bottom:10px;line-height:1.4;">
+              Hindsight searched bank <code>opsmind-${esc(i.service)}</code> and surfaced proven historical resolutions for this symptom:
             </p>
-            ${items}
+            ${memoryCards}
 
             <div class="feedback-box">
               <div class="feedback-prompt">
-                <strong>Did this recalled memory help you?</strong>
-                <div style="font-size:11px;color:var(--text-faint);">Your verdict trains future recall accuracy (IMPROVE).</div>
+                <strong>Did this recalled memory help resolve the issue?</strong>
+                <div style="font-size:10.5px;color:var(--text-faint);">Your rating is retained back into Hindsight to steer future recall precision (IMPROVE).</div>
               </div>
               <div class="feedback-actions">
-                <button class="btn btn-sm" onclick="sendFeedback('${i.id}', true)" style="border-color:var(--emerald-resolve);color:var(--emerald-resolve);">
-                  👍 Helpful
+                <button class="btn btn-sm" onclick="sendFeedback('${i.id}', true)" style="border-color:var(--emerald-resolve);color:var(--emerald-resolve);background:var(--emerald-dim);font-weight:600;">
+                  👍 Helpful Fix
                 </button>
-                <button class="btn btn-sm" onclick="sendFeedback('${i.id}', false)" style="border-color:#ef4444;color:#ef4444;">
-                  👎 Not Helpful
+                <button class="btn btn-sm" onclick="sendFeedback('${i.id}', false)" style="border-color:#ef4444;color:#ef4444;background:rgba(239,68,68,0.08);">
+                  👎 Not Relevant
                 </button>
               </div>
             </div>
           </div>
         `;
       } else {
-        recallHtml = `
-          <div class="section-box">
-            <div class="section-box-header">
-              <div class="section-title memory-title">Recalled From Memory (RECALL)</div>
+        recallSectionHtml = `
+          <div class="section-box" style="border-style:dashed;">
+            <div class="section-header">
+              <div class="section-title memory-accent">
+                🧠 Hindsight Memory Search (RECALL)
+              </div>
+              <span class="status-pill">Novel Issue</span>
             </div>
-            <div style="color:var(--text-muted);font-size:13px;padding:6px 0;">
-              No prior matching incidents found in <code>opsmind-${esc(i.service)}</code>. This appears to be a novel issue. When resolved, its fix will become permanent memory for the next occurrence.
-            </div>
+            <p style="color:var(--text-muted);font-size:12px;line-height:1.5;">
+              <strong style="color:var(--text-main);">No matching memory found</strong> in <code>opsmind-${esc(i.service)}</code>.
+              When resolved, its verified root cause and hotfix will become permanent memory for future occurrences.
+            </p>
           </div>
         `;
       }
 
-      // Resolution section
+      // 2. Agent Diagnosis & Recommendation Section
+      let agentDiagnosisText = '';
+      let agentRecommendationText = '';
+      if (hasRecalls) {
+        agentDiagnosisText = `Pattern matches a known recurring issue in <strong>${esc(i.service)}</strong>. Historical incidents exhibited identical symptom signatures.`;
+        agentRecommendationText = `Apply candidate resolution from memory: <em>"${esc(i.similar_past_incidents[0].text)}"</em> before escalating.`;
+      } else {
+        agentDiagnosisText = `No historical match found in <strong>opsmind-${esc(i.service)}</strong>. Diagnosis indicates a novel anomaly.`;
+        agentRecommendationText = `Execute standard triage checklist for <strong>${esc(i.service)}</strong>. Record verified root cause upon resolution.`;
+      }
+
+      // 3. Resolution Section
       let resolveHtml = '';
       if (isResolved) {
         resolveHtml = `
-          <div class="section-box" style="border-color:rgba(16,185,129,0.3);background:rgba(16,185,129,0.03);">
-            <div class="section-box-header">
-              <div class="section-title resolve-title">
-                ✅ Resolution Recorded (REMEMBER)
+          <div class="section-box" style="border-color:var(--emerald-border);background:rgba(16,185,129,0.04);">
+            <div class="section-header">
+              <div class="section-title resolve-accent">
+                ✅ Verified Resolution Recorded (REMEMBER)
               </div>
               <span class="status-pill resolved">Resolved at ${esc(i.resolved_at || 'Recorded')}</span>
             </div>
 
-            <div style="margin-bottom:12px;">
-              <div class="form-label" style="color:var(--emerald-resolve);">Verified Root Cause:</div>
-              <div style="background:var(--bg-surface);padding:10px 14px;border-radius:6px;border:1px solid var(--border-subtle);font-size:13px;">
-                ${esc(i.root_cause || 'Not specified')}
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+              <div>
+                <div class="form-label" style="color:var(--emerald-resolve);margin-bottom:4px;">Verified Root Cause:</div>
+                <div style="background:var(--bg-card);padding:10px 12px;border-radius:6px;border:1px solid var(--border-subtle);font-size:12.5px;color:var(--text-main);">
+                  ${esc(i.root_cause || 'Not specified')}
+                </div>
               </div>
-            </div>
-
-            <div>
-              <div class="form-label" style="color:var(--emerald-resolve);">Fix &amp; Prevention Applied:</div>
-              <div style="background:var(--bg-surface);padding:10px 14px;border-radius:6px;border:1px solid var(--border-subtle);font-size:13px;">
-                ${esc(i.resolution || 'Not specified')}
+              <div>
+                <div class="form-label" style="color:var(--emerald-resolve);margin-bottom:4px;">Hotfix &amp; Prevention Applied:</div>
+                <div style="background:var(--bg-card);padding:10px 12px;border-radius:6px;border:1px solid var(--border-subtle);font-size:12.5px;color:var(--text-main);">
+                  ${esc(i.resolution || 'Not specified')}
+                </div>
               </div>
             </div>
           </div>
@@ -1850,14 +2153,14 @@
       } else {
         resolveHtml = `
           <div class="section-box">
-            <div class="section-box-header">
-              <div class="section-title resolve-title">Resolve This Incident</div>
+            <div class="section-header">
+              <div class="section-title resolve-accent">Incident Resolution &amp; Memory Commit</div>
               <button class="btn btn-sm btn-primary" onclick="openResolveModal('${i.id}', '${esc(i.title)}')">
                 Resolve &amp; Remember Fix
               </button>
             </div>
-            <p style="color:var(--text-muted);font-size:12.5px;">
-              Resolving this incident will retain the root cause and hotfix into Hindsight. The next time <code>${esc(i.service)}</code> encounters this symptom, this fix will be suggested immediately.
+            <p style="color:var(--text-muted);font-size:12px;line-height:1.5;">
+              Resolving this incident will retain the root cause and hotfix into Hindsight bank <code>opsmind-${esc(i.service)}</code>. The next time <code>${esc(i.service)}</code> encounters this symptom, this fix will be suggested immediately.
             </p>
           </div>
         `;
@@ -1865,20 +2168,22 @@
 
       // Tags display
       const tagsHtml = (i.tags && i.tags.length > 0)
-        ? i.tags.map(t => `<span class="tag-bubble">#${esc(t)}</span>`).join('')
+        ? i.tags.map(t => `<span class="tag-bubble">#${esc(t)}</span>`).join(' ')
         : '<span class="tag-bubble">none</span>';
 
+      // Assemble Center Workspace
       col.innerHTML = `
+        <!-- Incident Hero Card -->
         <div class="detail-hero">
           <div class="detail-top-row">
             <span class="sev-pill ${i.severity}">${esc(i.severity)}</span>
             ${isResolved 
-              ? '<span class="status-pill resolved" style="font-size:12px;">● Resolved</span>' 
-              : '<span class="status-pill" style="font-size:12px;">● Active Open</span>'}
+              ? '<span class="status-pill resolved">● Resolved</span>' 
+              : '<span class="status-pill">● Active Open</span>'}
           </div>
           <h1 class="detail-title">${esc(i.title)}</h1>
           <div class="detail-meta-bar">
-            <span><strong>Service:</strong> ${esc(i.service)}</span>
+            <span><strong>Service:</strong> <code>${esc(i.service)}</code></span>
             <span>·</span>
             <span><strong>Incident ID:</strong> <code>${esc(i.id)}</code></span>
             <span>·</span>
@@ -1888,17 +2193,41 @@
           </div>
         </div>
 
+        <!-- Symptoms & Observed Error Logs -->
         <div class="section-box">
-          <div class="section-title" style="color:var(--text-muted);margin-bottom:8px;">Observed Symptoms &amp; Logs</div>
-          <div style="font-size:13.5px;color:#cbd5e1;white-space:pre-wrap;line-height:1.6;">${esc(i.description)}</div>
+          <div class="section-header">
+            <div class="section-title">Observed Symptoms &amp; Telemetry Logs</div>
+          </div>
+          <div class="terminal-box">${esc(i.description)}</div>
         </div>
 
-        ${recallHtml}
+        <!-- Hindsight Memory Candidates (Visual Star in Center) -->
+        ${recallSectionHtml}
+
+        <!-- Agent Diagnosis & Recommendation -->
+        <div class="section-box">
+          <div class="section-header">
+            <div class="section-title agent-accent">
+              🤖 Agent Diagnosis &amp; Recommended Action
+            </div>
+            <span class="badge" style="font-family:var(--font-mono);font-size:10.5px;color:var(--cyan-core);">Autonomous Analysis</span>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <div style="font-size:12.5px;color:var(--text-body);line-height:1.5;">
+              <strong>Diagnosis:</strong> ${agentDiagnosisText}
+            </div>
+            <div style="font-size:12.5px;color:var(--text-body);line-height:1.5;background:var(--bg-card);padding:8px 12px;border-radius:6px;border-left:3px solid var(--cyan-core);">
+              <strong>Recommendation:</strong> ${agentRecommendationText}
+            </div>
+          </div>
+        </div>
+
+        <!-- Resolution Section -->
         ${resolveHtml}
       `;
     }
 
-    // Feedback Action
+    // Feedback Submission
     async function sendFeedback(incidentId, wasHelpful) {
       const incident = state.incidents.find(i => i.id === incidentId);
       const suggestionText = (incident?.similar_past_incidents?.[0]?.text) || 'Recalled resolution suggestion';
@@ -1907,7 +2236,7 @@
           suggestion_text: suggestionText,
           was_helpful: wasHelpful,
         });
-        showToast(wasHelpful ? 'Feedback saved! Recorded as helpful in Hindsight.' : 'Feedback saved! Retained as unhelpful in Hindsight.', 'success');
+        showToast(wasHelpful ? 'Feedback saved! Retained as helpful in Hindsight.' : 'Feedback saved! Retained as unhelpful in Hindsight.', 'success');
         await loadStats();
       } catch (err) {
         showToast('Failed to record feedback: ' + err.message, 'error');
@@ -1959,25 +2288,22 @@
 
     function renderInsights() {
       const container = $('#fullInsightsContainer');
-      const sidebarContainer = $('#sidebarInsightList');
       const countEl = $('#insightsCount');
 
       countEl.textContent = state.insights.length;
 
       if (state.insights.length === 0) {
-        const empty = `
+        container.innerHTML = `
           <div class="empty-placeholder">
             <svg viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 4.03-9 9 0 2.12.74 4.07 1.97 5.61L4.35 19.4c-.39.39-.39 1.02 0 1.41.39.39 1.02.39 1.41 0l1.9-1.9C9.22 19.64 10.56 20 12 20c4.97 0 9-4.03 9-9s-4.03-9-9-9zm0 15c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6z"/></svg>
             <p style="font-weight:600;">No Synthesized Insights Yet</p>
             <p>Ask a question to reason across retained memories.</p>
           </div>
         `;
-        container.innerHTML = empty;
-        sidebarContainer.innerHTML = empty;
         return;
       }
 
-      const html = state.insights.map(ins => {
+      container.innerHTML = state.insights.map(ins => {
         const citations = (ins.based_on && ins.based_on.length > 0)
           ? `
             <div class="citations-header">Based on ${ins.based_on.length} Retained Memories in Hindsight:</div>
@@ -1994,26 +2320,16 @@
             </div>
             <div class="insight-a">${esc(ins.answer)}</div>
             ${citations}
-            <div style="font-size:11px;color:var(--text-faint);margin-top:8px;font-family:var(--font-mono);display:flex;justify-content:space-between;">
+            <div style="font-size:11px;color:var(--text-faint);margin-top:6px;font-family:var(--font-mono);display:flex;justify-content:space-between;">
               <span>Created: ${esc(ins.created_at || 'Recent')}</span>
               <span>${ins.confidence != null ? `Confidence: ${(ins.confidence * 100).toFixed(0)}%` : ''}</span>
             </div>
           </div>
         `;
       }).join('');
-
-      container.innerHTML = html;
-
-      // Sidebar mini version
-      sidebarContainer.innerHTML = state.insights.slice(0, 5).map(ins => `
-        <div style="background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:6px;padding:10px;margin-bottom:8px;">
-          <div style="font-size:12px;font-weight:600;color:var(--purple-reflect);margin-bottom:4px;">${esc(ins.question)}</div>
-          <div style="font-size:12px;color:var(--text-muted);line-height:1.4;">${esc(ins.answer)}</div>
-        </div>
-      `).join('');
     }
 
-    // Run Reflection
+    // Trigger Reflection Call
     async function triggerReflect(service, question) {
       if (!question || !question.trim()) {
         showToast('Please enter a question to reflect on.', 'error');
@@ -2032,7 +2348,7 @@
       }
     }
 
-    // Modal Management
+    // Modal Control Functions
     function openModal(id) { $('#' + id).classList.add('open'); }
     function closeModal(id) { $('#' + id).classList.remove('open'); }
 
@@ -2069,7 +2385,7 @@
       }
     }
 
-    // Form Submissions
+    // Form Event Handlers
     $('#formNewIncident').addEventListener('submit', async (e) => {
       e.preventDefault();
       const service = $('#newIncService').value.trim();
@@ -2126,7 +2442,7 @@
       }
     });
 
-    // View Navigation Tabs
+    // Tab Navigation
     $$('.nav-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         $$('.nav-btn').forEach(b => b.classList.remove('active'));
@@ -2153,7 +2469,7 @@
       renderIncidentList();
     });
 
-    // Buttons
+    // Header Actions
     $('#btnNewIncident').addEventListener('click', openNewIncidentModal);
     $('#btnRefreshAll').addEventListener('click', refreshAll);
     $('#baseUrlInput').addEventListener('change', refreshAll);
@@ -2162,12 +2478,6 @@
       const service = $('#reflectServiceSelect').value || 'payments';
       const question = $('#reflectQueryText').value;
       triggerReflect(service, question);
-    });
-
-    $('#btnQuickReflect').addEventListener('click', () => {
-      const question = $('#quickReflectInput').value;
-      triggerReflect(state.activeService, question);
-      $('#quickReflectInput').value = '';
     });
 
     $$('.prompt-chip').forEach(chip => {

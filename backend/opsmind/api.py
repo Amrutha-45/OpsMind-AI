@@ -132,9 +132,11 @@ def stats():
 @app.get("/ui", response_class=HTMLResponse)
 def serve_ui():
     repo_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
-    html_path = os.path.join(repo_root, "frontend", "index.html")
-    if os.path.isfile(html_path):
-        return FileResponse(html_path, media_type="text/html")
+    dist_html = os.path.join(repo_root, "frontend", "dist", "index.html")
+    legacy_html = os.path.join(repo_root, "frontend", "index.html")
+    target_html = dist_html if os.path.isfile(dist_html) else legacy_html
+    if os.path.isfile(target_html):
+        return FileResponse(target_html, media_type="text/html")
     return HTMLResponse("<h1>OpsMind AI backend is running.</h1><p>Frontend file not found.</p>")
 
 

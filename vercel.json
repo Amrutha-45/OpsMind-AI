@@ -1,0 +1,12 @@
+{
+  "buildCommand": "cd ui && npm ci && npm run build",
+  "outputDirectory": "ui/dist",
+  "installCommand": "echo skip",
+  "framework": null,
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}
