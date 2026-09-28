@@ -14,18 +14,35 @@ import type {
   SeedResult,
 } from '@/types';
 
-// Production backend URL (Render deployment)
+// Backend target URLs
 const RENDER_URL = 'https://opsmind-ai-x96p.onrender.com';
+const LOCALHOST_URL = 'http://localhost:8000';
 
 // Resolve the API base URL:
-//   1. Use VITE_API_URL if explicitly set at build time
-//   2. Fall back to RENDER_URL when not running on localhost (i.e., deployed to Vercel)
-//   3. Use empty string on localhost so Vite's dev proxy handles routing
-const BASE = import.meta.env.VITE_API_URL
-  ? (import.meta.env.VITE_API_URL as string).replace(/\/$/, '')
-  : typeof window !== 'undefined' && !window.location.hostname.includes('localhost')
-    ? RENDER_URL
-    : '';
+//   1. Use VITE_API_URL if explicitly provided via env
+//   2. If in development mode (import.meta.env.DEV) or running on localhost / 127.0.0.1, use LOCALHOST_URL (http://localhost:8000)
+//   3. In production builds on non-localhost hosts (such as Vercel), use RENDER_URL
+const getBaseUrl = (): string => {
+  const envUrl = import.meta.env.VITE_API_URL;
+  if (envUrl && typeof envUrl === 'string' && envUrl.trim() !== '') {
+    return envUrl.trim().replace(/\/$/, '');
+  }
+
+  if (import.meta.env.DEV) {
+    return LOCALHOST_URL;
+  }
+
+  if (typeof window !== 'undefined') {
+    const host = window.location.hostname;
+    if (host === 'localhost' || host === '127.0.0.1') {
+      return LOCALHOST_URL;
+    }
+  }
+
+  return RENDER_URL;
+};
+
+const BASE = getBaseUrl();
 
 
 async function request<T>(

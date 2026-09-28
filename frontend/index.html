@@ -1837,10 +1837,12 @@
 
     function getBaseUrl() {
       const input = $('#baseUrlInput');
-      if (input && input.value.trim()) {
-        return input.value.trim().replace(/\/$/, '');
+      const val = input ? input.value.trim().replace(/\/$/, '') : '';
+      if (val) {
+        return val;
       }
-      return window.location.origin;
+      const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+      return isLocal ? 'http://localhost:8000' : 'https://opsmind-ai-x96p.onrender.com';
     }
 
     function esc(s) {
@@ -2587,6 +2589,10 @@
     });
 
     // Initial Boot
+    const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+    if ($('#baseUrlInput')) {
+      $('#baseUrlInput').value = isLocalhost ? 'http://localhost:8000' : 'https://opsmind-ai-x96p.onrender.com';
+    }
     refreshAll();
     setInterval(checkHealth, 15000);
   </script>
