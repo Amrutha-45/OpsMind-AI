@@ -118,9 +118,15 @@ class Handler(BaseHTTPRequestHandler):
     def _health(self):
         try:
             upstream = agent.hindsight.health()
+            engine_status = "connected"
         except Exception as e:  # noqa: BLE001
-            upstream = {"error": str(e)}
-        self._send_json(200, {"status": "ok", "hindsight": upstream})
+            upstream = {"status": "offline", "error": str(e)}
+            engine_status = "autonomous_semantic_engine_active"
+        self._send_json(200, {
+            "status": "ok",
+            "memory_engine": engine_status,
+            "hindsight": upstream,
+        })
 
     def _open_incident(self):
         body = self._read_json()

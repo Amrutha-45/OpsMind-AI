@@ -66,9 +66,15 @@ class FeedbackRequest(BaseModel):
 def health():
     try:
         upstream = agent.hindsight.health()
-    except Exception as e:  # noqa: BLE001 - surface any backend error verbatim
-        upstream = {"error": str(e)}
-    return {"status": "ok", "hindsight": upstream}
+        engine_status = "connected"
+    except Exception as e:
+        upstream = {"status": "offline", "error": str(e)}
+        engine_status = "autonomous_semantic_engine_active"
+    return {
+        "status": "ok",
+        "memory_engine": engine_status,
+        "hindsight": upstream,
+    }
 
 
 @app.post("/incidents")
