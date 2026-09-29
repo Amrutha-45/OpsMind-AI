@@ -25,11 +25,11 @@ export const NewIncidentModal: React.FC<NewIncidentModalProps> = ({
   onSubmit,
   knownServices,
 }) => {
-  const [service, setService] = useState('auth-service');
+  const [service, setService] = useState('payments');
   const [title, setTitle] = useState('');
   const [severity, setSeverity] = useState<Severity>('SEV2');
   const [description, setDescription] = useState('');
-  const [tagsStr, setTagsStr] = useState('jwt, latency');
+  const [tagsStr, setTagsStr] = useState('payments, deploy');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {

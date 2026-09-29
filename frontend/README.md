@@ -1,32 +1,15 @@
-# React + TypeScript + Vite
+# OpsMind AI — Frontend Dashboard
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+React + TypeScript + Vite modern SRE dashboard for OpsMind AI.
 
-Currently, two official plugins are available:
+## Live Deployment
+- 🚀 **Live Web App:** [https://opsmind-ai-web.vercel.app/](https://opsmind-ai-web.vercel.app/)
+- ⚡ **Production Backend API:** [https://opsmind-ai-x96p.onrender.com](https://opsmind-ai-x96p.onrender.com)
+- 📦 **GitHub:** [https://github.com/Amrutha-45/OpsMind-AI](https://github.com/Amrutha-45/OpsMind-AI)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the Oxlint configuration
-
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
-
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
-```
-
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+## Features
+- **Overview Page:** Real-time metrics, active vs resolved incidents, Hindsight memory bank status, and quick incident trigger.
+- **Incident Stream & Workspace:** Complete inspection of telemetry symptoms, automated memory recall with vector similarity percentages, and runbook remediation plans.
+- **Human-in-the-Loop Feedback:** Interactive 👍 Helpful / 👎 Not Helpful buttons to train and shape future memory recall weights.
+- **Hindsight Reflection Archive:** Ask postmortem questions across a service's full retained history to synthesize institutional insights.
+- **Architecture & Scoring View:** Interactive visualization of the 5-stage memory loop (`REMEMBER → RECALL → APPLY → LEARN → IMPROVE`).

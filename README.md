@@ -1,8 +1,15 @@
 # OpsMind AI
 
-**A memory-powered incident response agent, built on [Hindsight](https://github.com/vectorize-io/hindsight).**
+> **Autonomous Incident Memory & SRE Copilot**  
+> Built for the *AI Agents That Learn Using Hindsight* Hackathon.
 
-Built for the *AI Agents That Learn Using Hindsight* hackathon.
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Vercel-black?style=for-the-badge&logo=vercel)](https://opsmind-ai-web.vercel.app/)
+[![Backend API](https://img.shields.io/badge/Backend%20API-Render-46E3B7?style=for-the-badge&logo=render)](https://opsmind-ai-x96p.onrender.com)
+[![Built with Hindsight](https://img.shields.io/badge/Memory%20Engine-Hindsight-6366f1?style=for-the-badge)](https://github.com/vectorize-io/hindsight)
+
+🔗 **Live Frontend:** [https://opsmind-ai-web.vercel.app/](https://opsmind-ai-web.vercel.app/)  
+⚡ **Production Backend:** [https://opsmind-ai-x96p.onrender.com](https://opsmind-ai-x96p.onrender.com)  
+📦 **GitHub Repository:** [https://github.com/Amrutha-45/OpsMind-AI](https://github.com/Amrutha-45/OpsMind-AI)
 
 ---
 
